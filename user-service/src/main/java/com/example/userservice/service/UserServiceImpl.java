@@ -1,15 +1,10 @@
 package com.example.userservice.service;
 
 import com.example.userservice.repository.UserRepository;
-import com.example.userservice.web.model.NotFoundException;
 import com.example.userservice.web.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +13,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User selectUser(UUID id) {
-        return userRepository.findById(id).orElseThrow(NotFoundException::new);
+    public User selectUser(String id) {
+        //return  mongoTemplate.findById(id, User.class);
+        return userRepository.findUserById(id);
+                //.orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -28,8 +25,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UUID userId, User user) {
-        User updatedUser = userRepository.findById(userId).orElseThrow(NotFoundException::new);
+    public User updateUser(String id, User user) {
+        User updatedUser = userRepository.findUserById(id);
+                //.orElseThrow(NotFoundException::new);
         updatedUser.setFirstName(user.getFirstName());
         updatedUser.setLastName(user.getLastName());
         updatedUser.setAge(user.getAge());
@@ -38,8 +36,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(UUID id) {
+    public User deleteUser(String id) {
+        User user = userRepository.findUserById(id);
         userRepository.deleteById(id);
+        return user;
     }
 
     @Override
