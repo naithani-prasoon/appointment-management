@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 @Document("appointment")
 public class Appointments{
 
@@ -27,10 +29,10 @@ public class Appointments{
     private String appointmentDescription;
 
     @NotNull
-    private LocalDateTime appointmentStartTime;
+    private String appointmentStartTime;
 
     @NotNull
-    private LocalDateTime appointmentEndTime;
+    private String appointmentEndTime;
 
     private String appointmentMetaData;
 
