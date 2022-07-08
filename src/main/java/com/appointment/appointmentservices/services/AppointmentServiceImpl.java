@@ -1,6 +1,6 @@
 package com.appointment.appointmentservices.services;
 
-import com.appointment.appointmentservices.model.Appointments;
+import com.appointment.appointmentservices.web.model.Appointments;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,12 +33,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointments createApt(Appointments appointments) {
         return Appointments.builder()
                 .id(UUID.randomUUID())
-                .appointmentName(appointments.appointmentName)
-                .appointmentType(appointments.appointmentType)
-                .appointmentStartTime(appointments.appointmentStartTime)
-                .appointmentDescription(appointments.appointmentDescription)
-                .appointmentEndTime(appointments.appointmentEndTime)
-                .appointmentMetaData(appointments.appointmentMetaData)
                 .build();
     }
 

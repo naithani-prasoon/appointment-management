@@ -1,6 +1,6 @@
-package com.appointment.appointmentservices.contollers;
+package com.appointment.appointmentservices.web.contollers;
 
-import com.appointment.appointmentservices.model.Appointments;
+import com.appointment.appointmentservices.web.model.Appointments;
 import com.appointment.appointmentservices.services.AppointmentService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RequestMapping("/api/v1/appointments")
@@ -31,7 +32,7 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> handlePost(Appointments appointments){
+    public ResponseEntity<?> handlePost(@Valid Appointments appointments){
         Appointments createAppointment = appointmentService.createApt(appointments);
         HttpHeaders headers = new HttpHeaders();
 
@@ -41,7 +42,7 @@ public class AppointmentController {
     }
 
     @PutMapping({"/{appointmentId}"})
-    public ResponseEntity<?> handlePut(@PathVariable("appointmentId") UUID appointmentId, Appointments appointments){
+    public ResponseEntity<?> handlePut(@PathVariable("appointmentId") UUID appointmentId, @Valid Appointments appointments){
         appointmentService.updateApt(appointmentId,appointments);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

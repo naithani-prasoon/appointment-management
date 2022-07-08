@@ -1,4 +1,4 @@
-package com.appointment.appointmentservices.model;
+package com.appointment.appointmentservices.web.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

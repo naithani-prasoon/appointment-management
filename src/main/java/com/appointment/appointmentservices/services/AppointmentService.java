@@ -1,8 +1,7 @@
 package com.appointment.appointmentservices.services;
 
-import com.appointment.appointmentservices.model.Appointments;
+import com.appointment.appointmentservices.web.model.Appointments;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
