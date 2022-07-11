@@ -24,7 +24,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointments createApt(Appointments appointments) {
 
-        return appointmentRepo.save(appointments);
+        Appointments newAppointment = new Appointments(UUID.randomUUID(), appointments.getAppointmentName(),
+                appointments.getAppointmentType(), appointments.getAppointmentDescription(),
+                appointments.getAppointmentStartTime(), appointments.getAppointmentEndTime(),
+                appointments.getAppointmentMetaData());
+
+        appointmentRepo.insert(newAppointment);
+
+        return newAppointment;
     }
 
     @Override
