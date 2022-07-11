@@ -2,15 +2,17 @@ package com.example.userservice.repository;
 
 import com.example.userservice.web.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
-import java.util.UUID;
 
-
+@Repository
 public interface UserRepository extends MongoRepository<User, String> {
-    //public User findByFirstName(String firstName);
+    List<User> findAll();
     //public List<User> findByLastName(String lastName);
     User findUserById(String id);
+
+    List<User> findUsersByFirstNameOrLastName(String firstName, String lastName);
 
 }

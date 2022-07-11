@@ -5,18 +5,24 @@ import com.example.userservice.web.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
+    //TODO add exception handler
     private final UserRepository userRepository;
 
     @Override
     public User selectUser(String id) {
-        //return  mongoTemplate.findById(id, User.class);
         return userRepository.findUserById(id);
-                //.orElseThrow(NotFoundException::new);
+                //.orElseThrow(ChangeSetPersister.NotFoundException::new);
+    }
+
+    @Override
+    public List<User> getUserByFirstOrLastName(String firstName, String lastName) {
+        return userRepository.findUsersByFirstNameOrLastName(firstName, lastName);
     }
 
     @Override
@@ -28,9 +34,7 @@ public class UserServiceImpl implements UserService {
     public User updateUser(String id, User user) {
         User updatedUser = userRepository.findUserById(id);
                 //.orElseThrow(NotFoundException::new);
-        updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setAge(user.getAge());
+        updatedUser = user;
 
         return userRepository.save(updatedUser);
     }
@@ -43,8 +47,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Iterable<User> listUser() {
-        Iterable<User> users;
+    public List<User> listUser() {
+        List<User> users;
         users = userRepository.findAll();
         return users;
     }

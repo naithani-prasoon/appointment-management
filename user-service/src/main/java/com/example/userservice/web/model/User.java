@@ -5,18 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.io.Serializable;
 import java.util.UUID;
 
 @Data
@@ -26,7 +19,8 @@ import java.util.UUID;
 @Document("user")
 //@Entity
 public class User {
-    //TODO Add validation and maybe implement DTO design
+    //todo maybe implement DTO design
+    //todo maybe use UUID
 
     @Id
     private String id;
@@ -47,4 +41,5 @@ public class User {
 
     private String emailAdress;
     private String phoneNumber;
+
 }

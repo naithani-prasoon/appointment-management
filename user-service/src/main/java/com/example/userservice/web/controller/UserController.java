@@ -1,6 +1,5 @@
 package com.example.userservice.web.controller;
 
-import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
 import com.example.userservice.web.model.User;
 import lombok.RequiredArgsConstructor;
@@ -9,16 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path="/api/v1/user")
 public class UserController {
-
-    private final UserRepository userRepository;
-
     private final UserService userService;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userService.listUser(), HttpStatus.OK);
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable("userId") String userId){
@@ -26,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping()
-    public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> getUserByFirstOrLastName(@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName) {
+        return new ResponseEntity<>(userService.getUserByFirstOrLastName(firstName, lastName), HttpStatus.OK);
     }
 
     @PostMapping()
@@ -41,7 +43,7 @@ public class UserController {
     }
 
     @DeleteMapping("{userId}")
-    public ResponseEntity deleteUser(@PathVariable String userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
         userService.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
