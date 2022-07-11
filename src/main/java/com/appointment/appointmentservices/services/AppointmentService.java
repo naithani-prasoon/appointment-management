@@ -11,7 +11,7 @@ public interface AppointmentService {
 
     Appointments createApt(Appointments appointments);
 
-    void updateApt(UUID id, Appointments appointments);
+    Appointments updateApt(UUID id, Appointments appointments);
 
     Appointments getApt(UUID id);
 

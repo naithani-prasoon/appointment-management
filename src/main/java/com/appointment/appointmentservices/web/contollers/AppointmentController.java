@@ -23,12 +23,12 @@ public class AppointmentController {
     }
 
     @GetMapping({"/{appointmentId}"})
-    public ResponseEntity<Appointments> getAppointments(@PathVariable("appointmentId") UUID appointmentId){
+    public ResponseEntity<Appointments> getAppointment(@PathVariable("appointmentId") UUID appointmentId){
         return new ResponseEntity<>(appointmentService.getApt(appointmentId), HttpStatus.OK);
     }
 
     @GetMapping({"/getAll"})
-    public ResponseEntity<List<Appointments>> getAppointments(){
+    public ResponseEntity<List<Appointments>> getAllAppointments(){
         return new ResponseEntity<>(appointmentService.getAptList(), HttpStatus.OK);
     }
 

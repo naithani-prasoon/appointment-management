@@ -35,7 +35,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void updateApt(UUID id, Appointments appointments) {
+    public Appointments updateApt(UUID id, Appointments appointments) {
         //will implement later
         Appointments toBeUpdated = appointmentRepo.findAppointmentById(id);
 
@@ -52,6 +52,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
 
         appointmentRepo.save(toBeUpdated);
+
+        return toBeUpdated;
 
     }
 
