@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping(path="/api/v1/user")
 public class UserController {

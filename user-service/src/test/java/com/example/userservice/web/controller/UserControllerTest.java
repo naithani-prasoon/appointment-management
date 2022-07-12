@@ -1,6 +1,6 @@
 package com.example.userservice.web.controller;
 
-import com.example.userservice.repository.UserRepository;
+import com.example.userservice.service.UserService;
 import com.example.userservice.service.UserServiceImpl;
 import com.example.userservice.web.model.GenderEnum;
 import com.example.userservice.web.model.User;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -21,27 +20,22 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.reset;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
 @WebMvcTest(UserController.class)
-@Import(UserController.class)
 class UserControllerTest {
-
-    @MockBean
-    UserRepository userRepository;
-    @MockBean
-    UserServiceImpl userService;
 
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @MockBean
+    UserService userService;
 
     User user;
 
@@ -64,7 +58,7 @@ class UserControllerTest {
 
     @Test
     void getUserById() throws Exception {
-        given(userService.selectUser(any())).willReturn(user);
+        given(userService.selectUser(any(String.class))).willReturn(user);
 
         MvcResult result = mockMvc.perform(get("/api/v1/user/" + user.getId()))
                 .andExpect(status().isOk())
@@ -83,7 +77,7 @@ class UserControllerTest {
     void getAllUsers() throws Exception {
         given(userService.listUser()).willReturn(List.of(user));
 
-        MvcResult result = mockMvc.perform(get("/api/v1/user"))
+        MvcResult result = mockMvc.perform(get("/api/v1/user/all"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -95,12 +89,14 @@ class UserControllerTest {
         User newUser = User.builder().id("2").firstName("Henry").lastName("Cavil")
                 .age(21).gender(GenderEnum.MALE).build();
 
-        given(userService.createUser(any())).willReturn(newUser);
+        given(userService.createUser(any(User.class))).willReturn(newUser);
         String userJson = objectMapper.writeValueAsString(newUser);
 
-        MvcResult result = mockMvc.perform(post("/api/v1/beer")
+        MvcResult result = mockMvc.perform(post("/api/v1/user")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .content(userJson))
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("age", String.valueOf(user.getAge())))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -112,12 +108,14 @@ class UserControllerTest {
         User newUser = User.builder().id("2").firstName("Henry").lastName("Cavil")
                 .age(21).gender(GenderEnum.MALE).build();
 
-        given(userService.createUser(any())).willReturn(newUser);
+        given(userService.createUser(any(User.class))).willReturn(newUser);
         String userJson = objectMapper.writeValueAsString(newUser);
 
-        MvcResult result = mockMvc.perform(put("/api/v1/beer" + user.getId())
+        MvcResult result = mockMvc.perform(put("/api/v1/user/" + user.getId())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(userJson))
+                        .param("firstName", user.getFirstName())
+                        .param("lastName", user.getLastName())
+                        .param("age", String.valueOf(user.getAge())))
                         .andExpect(status().isOk())
                         .andReturn();
 
@@ -127,9 +125,9 @@ class UserControllerTest {
 
     @Test
     void deleteUser() throws Exception {
-        mockMvc.perform(delete("/api/v1/beer/{id}", "1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+        given(userService.deleteUser(any(String.class))).willReturn(null);
+
+        mockMvc.perform(delete("/api/v1/user/" + user.getId()))
                 .andExpect(status().isOk());
     }
 }

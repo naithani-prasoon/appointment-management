@@ -33,7 +33,6 @@ public class User {
     @NotBlank(message = "please enter your last name")
     private String lastName;
 
-    @NotNull
     private GenderEnum gender;
 
     @PositiveOrZero
