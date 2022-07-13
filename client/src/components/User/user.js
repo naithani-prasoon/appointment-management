@@ -1,24 +1,34 @@
-import React from "react";
-import axios from "axios";
+import { useState, useEffect } from "react"
+import { useParams } from 'react-router-dom';
+import Navigation from "../Navigation";
+import axios from 'axios'
 
+const defaultUser = {
+    firstName : "",
+    lastName : "",
+    age : "",
+    emailAddress : "",
+    phoneNumber : ""
+}
 
 export default function User() {
-    const [user, setUser] = React.useState(null)
-    const [appt, setappt] = React.useState(null)
-    const baseUrl = 'http://localhost:8080/api/v1/user/'
+    const [user, setData] = useState(defaultUser)
+    const { id } = useParams()
+    const url = `http://localhost:8080/api/v1/user/`
 
-    React.useEffect(() => {
-        axios.get(baseUrl + '62c5a35436faf068fc9d4791').then((res => {
-            setUser(res.data)
-        }))
+    useEffect(() => {
+        axios.get(url + id).then((res) => {
+            setData(res.data)
+        })
+        .catch((err) => { 
+            console.log(err)
+        })
     }, [])
 
-    if (!user) return null
-
-    return (
-        <div>
+    return(
+        <>
+            <Navigation />
             <h1>{user.firstName} {user.lastName}</h1>
-
-        </div>
+        </>
     )
 }

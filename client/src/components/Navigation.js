@@ -17,14 +17,20 @@ export default function Navigation() {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="/login">
-                  Login
+                <NavLink className="nav-link" to="/register">
+                  Register
                   <span className="sr-only">(current)</span>
                 </NavLink>
               </li>
               <li className="nav-item">
                 <NavLink className="nav-link" to="/profile">
                   Profile
+                  <span className="sr-only">(current)</span>
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/users">
+                  Users
                   <span className="sr-only">(current)</span>
                 </NavLink>
               </li>
