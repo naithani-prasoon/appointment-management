@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import './dashboard.css';
+import AppointmentForm from "./AppointmentForm";
 
 function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
@@ -20,19 +21,28 @@ export default function AppointmentTable() {
     const [popup, setPopup] = React.useState(false);
     const [editAppoitment, setEditAppointment] = React.useState({});
 
+    const[create, setCreate] = React.useState(false)
+
     function handleEditClick(appointment){
         setEditAppointment(appointment);
         setPopup(true)
     }
 
+    function handleCreateAppointment(){
+        setCreate(true);
+    }
+
     React.useEffect(() => {
-        axios.get(baseUrl + '62c5a35436faf068fc9d4791').then((res => {
+        axios.get(baseUrl).then((res => {
             console.log(res.data);
         }))
     }, [])
 
     return(
             <div className="table">
+                <div className="action-buttons">
+                    <button onClick={() => handleCreateAppointment()}> Create Appointment </button>
+                </div>
                 <div className="table-header">
                     <h2 style={{textAlign:"left"}}> Name </h2>
                     <h2> Type </h2>
@@ -55,9 +65,27 @@ export default function AppointmentTable() {
                 {
                     popup ?
                         <div className="edit-popup">
+                            <div className="popup">
+                                <AppointmentForm/>
+                            </div>
+                        </div>
+                        :
+                        <></>
+                }
+
+                {
+                    create ?
+                        <div className="edit-popup">
                             <div className="popup" >
-                                <h2 onClick={() => setPopup(false)}> Close </h2>
-                                {editAppoitment.name}
+                                <form>
+                                    <input type={"text"}/>
+                                    <input type={"text"}/>
+                                    <textarea type={"text"}/>
+                                    <input type={"time"}/>
+                                    <input type={"time"}/>
+                                    <button type={"submit"}>Create</button>
+                                    <button onClick={() => setCreate(false)} > Close </button>
+                                </form>
                             </div>
                         </div>
                         :
