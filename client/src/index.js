@@ -7,7 +7,8 @@ import Dashboard from "./routes/dashboard";
 import Register from './routes/register';
 import Profile from './routes/profile';
 import Users from './routes/users';
-import User from './components/User/User';
+import User from './routes/user';
+import UpdateUserForm from './components/User/UpdateUserForm';
 
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -24,6 +25,7 @@ root.render(
         <Route path = "/profile" element = {<Profile />} />
         <Route path='/users' element = {<Users />} />
         <Route path='/user/:id' element = {<User />} />
+        <Route path='/update/:id' element = {<UpdateUserForm />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

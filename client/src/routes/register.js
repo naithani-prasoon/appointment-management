@@ -1,12 +1,12 @@
 import Navigation from "../components/Navigation"
-import UserForm from "../components/UserForm"
+import CreateUserForm from "../components/User/CreateUserForm"
 
 export default function Register() {
 
     return(
         <>
             <Navigation />
-            <UserForm />
+            <CreateUserForm />
         </>
     )
 }
