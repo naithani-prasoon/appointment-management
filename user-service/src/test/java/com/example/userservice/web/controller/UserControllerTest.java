@@ -1,7 +1,6 @@
 package com.example.userservice.web.controller;
 
 import com.example.userservice.service.UserService;
-import com.example.userservice.service.UserServiceImpl;
 import com.example.userservice.web.model.GenderEnum;
 import com.example.userservice.web.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +45,7 @@ class UserControllerTest {
                 .firstName("John")
                 .lastName("Doe")
                 .age(25)
-                .emailAdress("JohnDoe@email.com")
+                .emailAddress("JohnDoe@email.com")
                 .phoneNumber("123456789")
                 .build();
     }

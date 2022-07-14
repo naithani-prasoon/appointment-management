@@ -32,11 +32,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(String id, User user) {
-        User updatedUser = userRepository.findUserById(id);
-                //.orElseThrow(NotFoundException::new);
-        updatedUser = user;
-
-        return userRepository.save(updatedUser);
+        user.setId(id);
+        return userRepository.save(user);
     }
 
     @Override
