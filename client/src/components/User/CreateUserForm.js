@@ -23,7 +23,7 @@ export default function CreateUserForm() {
         params.append('lastName', values.lastName)
         params.append('gender', values.gender)
         params.append('age', values.age)
-        params.append('emailAddress', values.email)
+        params.append('emailAddress', values.emailAddress)
         params.append('phoneNumber', values.phoneNumber)
         axios.post(baseUrl, params).then((res) => {
             nav('/user/' + res.data.id)
