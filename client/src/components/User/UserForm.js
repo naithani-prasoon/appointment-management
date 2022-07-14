@@ -1,6 +1,5 @@
 import React from "react"
 import Button from 'react-bootstrap/Button';
-import axios from "axios";
 import Form from 'react-bootstrap/Form';
 
 
@@ -38,7 +37,7 @@ export default function UserForm({user, setUser, request}) {
             </Form.Group>
             <Form.Group>
                 <Form.Label>Email</Form.Label>
-                <Form.Control type='email' name="email" value={user.emailAddress} onChange={handleInputChange}/>
+                <Form.Control type='email' name="email" value={user.email} onChange={handleInputChange}/>
             </Form.Group>
             <Form.Group>
                 <Form.Label>Phone Number</Form.Label>
