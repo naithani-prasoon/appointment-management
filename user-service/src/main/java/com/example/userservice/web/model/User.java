@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -38,7 +37,7 @@ public class User {
     @PositiveOrZero
     private Integer age;
 
-    private String emailAdress;
+    private String emailAddress;
     private String phoneNumber;
 
 }
