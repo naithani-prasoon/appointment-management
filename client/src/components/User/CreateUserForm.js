@@ -3,7 +3,9 @@ import axios from "axios";
 import { useNavigate  } from 'react-router-dom';
 import { useState } from "react";
 
-export default function CreateUserForm() {
+
+//setPopup : true, passed as true and when done with form turn false
+export default function CreateUserForm({setPopup, setCreateUser, edit}) {
     const [values, setValues] = useState({
         firstName: "",
         lastName: "",
@@ -25,14 +27,18 @@ export default function CreateUserForm() {
         params.append('age', values.age)
         params.append('emailAddress', values.emailAddress)
         params.append('phoneNumber', values.phoneNumber)
-        axios.post(baseUrl, params).then((res) => {
-            nav('/user/' + res.data.id)
+        axios.post(baseUrl, params)
+        .then((res) => {
+            setPopup(false)
+            setCreateUser(false)
+        }).catch((e) => {
+            console.log(e)
         })
     }
 
     return (
         <>
-            <UserForm user={values} setUser={setValues} request={handleSubmit} />
+            <UserForm user={values} setUser={setValues} request={handleSubmit} setPopup={setPopup} setCreateUser={setCreateUser} edit={edit} />
         </>
     )
 

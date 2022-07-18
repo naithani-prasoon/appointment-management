@@ -12,14 +12,14 @@ const defaultUser = {
 }
 
 export default function User() {
-    const [user, setData] = useState(defaultUser)
+    const [user, setUser] = useState(defaultUser)
     const { id } = useParams()
     const navigate = useNavigate()
     const url = `http://localhost:8080/api/v1/user/`
 
     useEffect(() => {
         axios.get(url + id).then((res) => {
-            setData(res.data)
+            setUser(res.data)
         })
         .catch((err) => { 
             console.log(err)
@@ -28,7 +28,7 @@ export default function User() {
 
     const deleteUser = () => {
         axios.delete(url + id)
-        navigate('/users')
+        navigate('/users', { replace: true })
     }
 
     const updateUser = () => {

@@ -4,27 +4,29 @@ import axios from "axios";
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useState } from "react";
 
-export default function UpdateUserForm() {
+//setPopup : true, passed as true and when done with form turn false
+export default function UpdateUserForm({passedUser, setPopup, edit}) {
     const baseUrl = 'http://localhost:8080/api/v1/user/'
     const nav = useNavigate()
     const { id } = useParams()
-    const location = useLocation()
+    //const location = useLocation()
 
-    const [values, setValues] = useState(location.state)
+    const [user, setUser] = useState(passedUser)
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const params = new URLSearchParams()
-        params.append('firstName', values.firstName)
-        params.append('lastName', values.lastName)
-        params.append('gender', values.gender)
-        params.append('age', values.age)
-        params.append('emailAddress', values.emailAddress)
-        params.append('phoneNumber', values.phoneNumber)
+        params.append('firstName', user.firstName)
+        params.append('lastName', user.lastName)
+        params.append('gender', user.gender)
+        params.append('age', user.age)
+        params.append('emailAddress', user.emailAddress)
+        params.append('phoneNumber', user.phoneNumber)
 
-        axios.put(baseUrl + id, params)
+        axios.put(baseUrl + user.id, params)
         .then((res) => {
-            nav('/user/' + res.data.id)
+            //nav('/user/' + res.data.id)
+            setPopup(false)
         })
         .catch((e) => {
             console.log(e)
@@ -33,8 +35,7 @@ export default function UpdateUserForm() {
 
     return(
         <>
-            <Navigation />
-            <UserForm user={values} setUser={setValues} request={handleSubmit} />
+            <UserForm user={user} setUser={setUser} request={handleSubmit} setPopup={setPopup} edit={edit} />
         </>
     )
 }
