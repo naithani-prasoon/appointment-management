@@ -2,7 +2,6 @@ package com.appointment.appointmentservices.web.contollers;
 
 import com.appointment.appointmentservices.web.model.Appointments;
 import com.appointment.appointmentservices.services.AppointmentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +11,7 @@ import java.util.List;
 import javax.validation.Valid;
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/v1/appointments")
 @RestController
 public class AppointmentController {
@@ -34,6 +34,7 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<?> handlePost(@Valid Appointments appointments){
+        System.out.println(appointments);
         Appointments createAppointment = appointmentService.createApt(appointments);
         HttpHeaders headers = new HttpHeaders();
 

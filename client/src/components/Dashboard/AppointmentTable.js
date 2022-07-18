@@ -5,23 +5,10 @@ import AppointmentForm from "./AppointmentForm";
 import EditIcon from '../Assets/edit.svg'
 import DeleteIcon from '../Assets/delete.svg'
 
-function createData(name, type, description, start, end) {
-    return { name, type, description, start, end };
-}
-
-//trial data
-const rows = [
-    createData('Frozen yoghurt', "159", 0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 export default function AppointmentTable() {
 
     //appointment data
-    const baseUrl = 'http://localhost:8080/api/v1/appointment/'
+    const baseUrl = 'http://localhost:8081/api/v1/appointments'
     const [appointmentList, setAppointmentList] = React.useState([]);
 
     //pop up states
@@ -29,7 +16,14 @@ export default function AppointmentTable() {
     const [createAppointment, setCreateAppointment] = React.useState(false);
     const [editAppoitment, setEditAppointment] = React.useState({name:'', type:'', description:'', start:'', end:''});
 
+    const [row, setRow] = React.useState([])
+
+    function createData(data) {
+        return [data['appointmentName'], data['appointmentType'], data['appointmentDescription'], data['appointmentStartTime'], data['appointmentEndTime'], data['id']];
+    }
+
     function handleEditClick(appointment){
+        console.log(appointment)
         setEditAppointment(appointment);
         setPopup(true)
     }
@@ -39,9 +33,25 @@ export default function AppointmentTable() {
         setCreateAppointment(true);
     }
 
+    function handleDeleteAppointment(appointment){
+        axios.delete(baseUrl + '/' + appointment[5]).then((res => {
+            console.log(res)
+            console.log("deleted")
+        }))
+
+        window.location.reload();
+    }
+
+
     React.useEffect(() => {
-        axios.get(baseUrl).then((res => {
-            console.log(res.data);
+        axios.get(baseUrl+'/getAll').then((res => {
+
+            let tempRow = []
+            for(let info = 0; info < res.data.length; info++){
+                tempRow.push(createData(res.data[info]))
+            }
+            setRow(tempRow)
+            console.log(row)
         }))
     }, [])
 
@@ -51,7 +61,6 @@ export default function AppointmentTable() {
                     <button onClick={() => handleCreateAppointment()}> Create Appointment </button>
                 </div>
                 <div className="table-header">
-
                     <h2> Name </h2>
                     <h2> Type </h2>
                     <h2> Description </h2>
@@ -61,15 +70,16 @@ export default function AppointmentTable() {
                     <h2></h2>
                 </div>
 
-                {rows.map((row) => (
+                {row.map((row) => (
+
                     <div className="table-appointments">
-                        <h2 style={{textAlign:"left"}}>{row.name}</h2>
-                        <h2>{row.type}</h2>
-                        <h2 style={{textAlign:"left"}}>{row.description}</h2>
-                        <h2>{row.start}</h2>
-                        <h2>{row.end}</h2>
+                        <h2 style={{textAlign:"left"}}>{row[0]}</h2>
+                        <h2>{row[1]}</h2>
+                        <h2 style={{textAlign:"left"}}>{row[2]}</h2>
+                        <h2>{row[3].replace("T", " ")}</h2>
+                        <h2>{row[4].replace("T", " ")}</h2>
                         <img src={EditIcon} onClick={() => handleEditClick(row)}/>
-                        <img src={DeleteIcon}/>
+                        <img src={DeleteIcon} onClick={() => handleDeleteAppointment(row)}/>
                     </div>
                 ))}
                 {

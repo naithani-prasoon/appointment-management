@@ -1,13 +1,19 @@
 import React from "react";
 import './form.css'
+import axios from 'axios';
 
 export default function AppointmentForm(props){
 
-    const [name, setName] = React.useState(props.data.name);
-    const [type, setType] = React.useState(props.data.type);
-    const [desc, setDesc] = React.useState(props.data.description);
-    const [start, setStart] = React.useState(props.data.start);
-    const [end, setEnd] = React.useState(props.data.end);
+    const [name, setName] = React.useState(props.data[0]);
+    const [type, setType] = React.useState(props.data[1]);
+    const [desc, setDesc] = React.useState(props.data[2]);
+    const [start, setStart] = React.useState(props.data[3]);
+    const [end, setEnd] = React.useState(props.data[4]);
+
+    const [loading, setLoading] =  React.useState(false);
+    const [message, setMessage] = React.useState("")
+
+    const baseUrl = 'http://localhost:8081/api/v1/appointments'
 
     function handleChange(event){
         switch(event.target.name){
@@ -30,18 +36,59 @@ export default function AppointmentForm(props){
                 console.log('error');
         }
     }
+
+    function onSubmit(event){
+        event.preventDefault();
+        try
+        {
+            console.log(name)
+            setLoading(true);
+            const data = new URLSearchParams()
+            data.append('appointmentName', name)
+            data.append('appointmentType',type)
+            data.append('appointmentDescription',desc)
+            data.append('appointmentStartTime',start)
+            data.append('appointmentEndTime',end)
+
+            console.log(baseUrl + '/' + props.data[5])
+
+            if(props.edit){
+                axios.put(baseUrl + '/' + props.data[5], data).then(response => {
+                    console.log(response.data);
+                })
+            }
+            else{
+                axios.post(baseUrl, data).then(response =>{
+                    console.log(response);
+                    console.log(response.data);
+                })
+            }
+
+            window.location.reload()
+            setMessage("Success")
+
+        }
+        catch{
+            setLoading(false);
+            console.log("error")
+        }
+    }
+
+    function closeButton(){
+        window.location.reload()
+    }
     
     return(
-        <form>
+        <form onSubmit={onSubmit}>
             <h1>{props.edit ? "Update Appointment" : "Create Appointment"}</h1>
             <div className="form-sections">
                 <div className="form-divider">
-                    <label>Appointment Name</label>
-                    <input type={"text"} name={"name"} value={name} onChange={event => handleChange(event)}/>
+                    <label>Appointment Name*</label>
+                    <input required={true} type={"text"} name={"name"} value={name} onChange={event => handleChange(event)}/>
                 </div>
                 <div className="form-divider">
-                    <label>Type</label>
-                    <input type={"text"} name={"type"} value= {type} onChange={event => handleChange(event)}/>
+                    <label>Type*</label>
+                    <input required={true} type={"text"} name={"type"} value= {type} onChange={event => handleChange(event)}/>
                 </div>
             </div>
 
@@ -51,19 +98,18 @@ export default function AppointmentForm(props){
             </div>
             <div className="form-sections">
                 <div className="form-divider">
-                    <label>Start Time</label>
-                    <input type={"time"} name={"start"} onChange={event => handleChange(event)}/>
+                    <label>Start Time*</label>
+                    <input required={true} type={"datetime-local"} name={"start"} value={start} onChange={event => handleChange(event)}/>
                 </div>
                 <div className="form-divider">
-                    <label> End Time</label>
-                    <input type={"time"} name={"end"} onChange={event => handleChange(event)}/>
+                    <label> End Time*</label>
+                    <input required={true} type={"datetime-local"} name={"end"} value={end} onChange={event => handleChange(event)}/>
                 </div>
             </div>
             <div className="form-sections">
-                <button type={"submit"}>{props.edit ? "Update" : "Create"}</button>
-                <button>Close</button>
+                <button disabled={loading} type={"submit"}>{props.edit ? "Update" : "Create"}</button>
+                <button type={"button"} disabled={loading} onClick={()=>closeButton()}>Close</button>
             </div>
-
         </form>
     )
 }
