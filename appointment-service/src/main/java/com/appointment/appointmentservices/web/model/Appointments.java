@@ -21,6 +21,9 @@ public class Appointments{
     private UUID id;
 
     @NotNull
+    private String userID;
+
+    @NotNull
     private String appointmentName;
 
     @NotNull

@@ -50,8 +50,8 @@ export default function UserList(props) {
         })
     }
 
-    const handleAppointment = (id) => {
-        nav('/dashboard', {userId: id})
+    const handleAppointment = (id, name) => {
+        nav('/dashboard',{state: {userId: id, userName: name}})
     }
 
     useEffect(() => {
@@ -67,8 +67,7 @@ export default function UserList(props) {
                 <button onClick={handleCreateUser}>Create User</button>
             </div>  
             <div className="table-header">
-                <h2>First Name</h2>
-                <h2>Last Name</h2>
+                <h2>Name</h2>
                 <h2>Age</h2>
                 <h2>Gender</h2>
                 <h2>Email</h2>
@@ -79,8 +78,7 @@ export default function UserList(props) {
             
             {props.users.map((user, idx) => (
                 <div className="table-appointments">
-                    <h2 style={{textAlign:"center"}}>{user.firstName}</h2>
-                    <h2 style={{textAlign:"center"}}>{user.lastName}</h2>
+                    <h2 style={{textAlign:"center"}}>{user.firstName + " " + user.lastName}</h2>
                     <h2>{user.age}</h2>
                     <h2>{user.gender}</h2>
                     <h2>{user.emailAddress}</h2>
@@ -88,7 +86,7 @@ export default function UserList(props) {
 
                     <img src={EditIcon} onClick={() => handleUpdateUser(user)} />
                     <img src={DeleteIcon} onClick={() => handleDeleteUser(user.id)} />
-                    <img src={CalendarIcon} onClick={() => handleAppointment(user.id)} />
+                    <img src={CalendarIcon} onClick={() => handleAppointment(user.id, user.firstName)} />
                 </div>
                     //<UserItem key={idx} user={user} />
             ))}

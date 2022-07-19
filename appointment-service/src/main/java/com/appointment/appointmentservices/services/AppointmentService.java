@@ -16,4 +16,6 @@ public interface AppointmentService {
     Appointments getApt(UUID id);
 
     void deleteApt(UUID id);
+
+    List<Appointments> getAptByUserID(String userId);
 }

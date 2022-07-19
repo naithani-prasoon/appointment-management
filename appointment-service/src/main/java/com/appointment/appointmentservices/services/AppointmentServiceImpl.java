@@ -24,7 +24,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointments createApt(Appointments appointments) {
 
-        Appointments newAppointment = new Appointments(UUID.randomUUID(), appointments.getAppointmentName(),
+        Appointments newAppointment = new Appointments(UUID.randomUUID(),
+                appointments.getUserID(), appointments.getAppointmentName(),
                 appointments.getAppointmentType(), appointments.getAppointmentDescription(),
                 appointments.getAppointmentStartTime(), appointments.getAppointmentEndTime(),
                 appointments.getAppointmentMetaData());
@@ -67,5 +68,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void deleteApt(UUID id) {
         //will implement later
         appointmentRepo.deleteById(id);
+    }
+
+    @Override
+    public List<Appointments> getAptByUserID(String userId) {
+        return appointmentRepo.findByUserID(userId);
     }
 }

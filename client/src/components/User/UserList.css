@@ -11,7 +11,6 @@ h1{
     display: grid;
     place-items: center;
     margin: 32px auto;
-    width:1600px;
     background: #ecf1f5;
     padding:26px;
     border-radius: 12px;
@@ -24,7 +23,7 @@ h1{
 
 .table-header, .table-appointments{
     display: grid;
-    grid-template-columns: 13% 13% 13% 13% 15% 15% 5% 5% 5%;
+    grid-template-columns: 17% 17% 17% 17% 17% 5% 5% 5%;
     width:100%;
     padding:5px 8px;
     place-content: center;

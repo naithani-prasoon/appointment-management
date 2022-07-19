@@ -32,6 +32,11 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentService.getAptList(), HttpStatus.OK);
     }
 
+    @GetMapping()
+    public ResponseEntity<List<Appointments>> getUserAppointments(@RequestParam String userId){
+        return new ResponseEntity<>(appointmentService.getAptByUserID(userId), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> handlePost(@Valid Appointments appointments){
         System.out.println(appointments);

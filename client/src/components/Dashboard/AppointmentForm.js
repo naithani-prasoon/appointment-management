@@ -1,8 +1,11 @@
 import React from "react";
 import './form.css'
 import axios from 'axios';
+import {useLocation} from "react-router-dom";
 
 export default function AppointmentForm(props){
+
+    const {state} = useLocation();
 
     const [name, setName] = React.useState(props.data[0]);
     const [type, setType] = React.useState(props.data[1]);
@@ -49,6 +52,9 @@ export default function AppointmentForm(props){
             data.append('appointmentDescription',desc)
             data.append('appointmentStartTime',start)
             data.append('appointmentEndTime',end)
+            if(state && state.userId){
+                data.append('userID', state.userId)
+            }
 
             console.log(baseUrl + '/' + props.data[5])
 
