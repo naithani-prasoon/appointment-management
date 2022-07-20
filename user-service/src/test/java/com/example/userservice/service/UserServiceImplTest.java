@@ -1,6 +1,7 @@
 package com.example.userservice.service;
 
 import com.example.userservice.repository.UserRepository;
+import com.example.userservice.web.model.NotFoundException;
 import com.example.userservice.web.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,15 +12,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -47,14 +47,26 @@ class UserServiceImplTest {
     @Test
     void selectUser() {
         //given
-        given(userRepository.findUserById(any())).willReturn(user);
+        given(userRepository.findUserById("1")).willReturn(user);
 
         //when
         User foundUser = userService.selectUser("1");
 
         //then
-        then(userRepository).should().findUserById(any());
+        then(userRepository).should().findUserById(any(String.class));
         assertThat(foundUser).isNotNull();
+    }
+
+    @Test
+    void selectUserThrowNotFoundException() {
+        //given
+        given(userRepository.findUserById("2")).willThrow(new NotFoundException("user not found"));
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> userService.selectUser("2"))
+                .isInstanceOf(NotFoundException.class);
     }
 
     @Test
