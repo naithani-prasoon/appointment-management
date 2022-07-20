@@ -21,8 +21,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUserByFirstOrLastName(String firstName, String lastName) {
-        return userRepository.findUsersByFirstNameOrLastName(firstName, lastName);
+    public List<User> getUserByFirstOrLastName(String name) {
+        String [] res = name.split("\\s+");
+        String firstName;
+        String lastName;
+        if (res.length == 2) {
+            firstName = res[0];
+            lastName = res[1];
+            return userRepository.findUsersByFirstNameAndLastName(firstName, lastName);
+        } else if (res.length == 1 && !res[0].isEmpty()) {
+            List<User> userByFirstName = userRepository.findUsersByFirstName(res[0]);
+            List<User> userByLastName = userRepository.findUsersByLastName(res[0]);
+            if (userByFirstName.size() != 0) return userByFirstName;
+            else return userByLastName;
+        } else {
+            return userRepository.findAll();
+        }
     }
 
     @Override

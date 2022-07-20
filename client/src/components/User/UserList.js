@@ -58,7 +58,9 @@ export default function UserList(props) {
         axios.get(baseUrl + 'all').then((res => {
             //setUsers(Object.values(res.data))
             props.usersChangeHandler(Object.values(res.data))
-        }))
+        })).catch((err) => { 
+            console.log(err)
+        })
     }, [change, popup]) 
 
     return(

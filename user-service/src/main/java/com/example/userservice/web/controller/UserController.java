@@ -29,8 +29,8 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> getUserByFirstOrLastName(@RequestParam(required = false) String firstName, @RequestParam(required = false) String lastName) {
-        return new ResponseEntity<>(userService.getUserByFirstOrLastName(firstName, lastName), HttpStatus.OK);
+    public ResponseEntity<List<User>> getUserByFirstOrLastName(@RequestParam(required = false) String name) {
+        return new ResponseEntity<>(userService.getUserByFirstOrLastName(name), HttpStatus.OK);
     }
 
     @PostMapping()
