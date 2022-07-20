@@ -64,7 +64,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.firstName", is("John")))
                 .andExpect(jsonPath("$.lastName", is("Doe")))
                 .andExpect(jsonPath("$.age", is(25)))
-                .andExpect(jsonPath("$.emailAdress", is("JohnDoe@email.com")))
+                .andExpect(jsonPath("$.emailAddress", is("JohnDoe@email.com")))
                 .andExpect(jsonPath("$.phoneNumber", is("123456789")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -127,6 +127,16 @@ class UserControllerTest {
         given(userService.deleteUser(any(String.class))).willReturn(null);
 
         mockMvc.perform(delete("/api/v1/user/" + user.getId()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getUserByFirstOrLastName() throws Exception {
+        given(userService.getUserByFirstOrLastName(any(String.class))).willReturn(List.of(user));
+
+        mockMvc.perform(get("/api/v1/user/")
+                .param("firstName", user.getFirstName())
+                .param("lastName", user.getLastName()))
                 .andExpect(status().isOk());
     }
 }
