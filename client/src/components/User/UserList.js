@@ -8,6 +8,7 @@ import DeleteIcon from '../Assets/delete.svg'
 import CalendarIcon from '../Assets/calendar.svg'
 import CreateUserForm from "./CreateUserForm";
 import UpdateUserForm from './UpdateUserForm'
+import UserPopup from './UserPopup'
 
 
 /*  props
@@ -23,14 +24,14 @@ const defaultUser = {
     phoneNumber : ""
 }
 export default function UserList(props) {
-    //const [users, setUsers] = useState([])
     const baseUrl = 'http://localhost:8080/api/v1/user/'
 
     //pop up states
-    const [popup, setPopup] = useState(false);
+    const [popup, setPopup] = useState(false)
     const [currentUser, setCurrentUser] = useState(defaultUser)
-    const [createUser, setCreateUser] = useState(false);
+    const [createUser, setCreateUser] = useState(false)
     const [change, setChange] = useState(false)
+    const [deleteUserPopup, setdeleteUserPopup] = useState(false)
     const nav = useNavigate()
 
 
@@ -44,9 +45,15 @@ export default function UserList(props) {
         setPopup(true)
     }
 
+    const handleDeleteUserPopup = (user) => {
+        setdeleteUserPopup(true)
+        setCurrentUser(user)
+    }
+
     const handleDeleteUser = (id) => {
         axios.delete(baseUrl + id).then((res) => {
             setChange(!change)
+            setdeleteUserPopup(false)
         })
     }
 
@@ -56,7 +63,6 @@ export default function UserList(props) {
 
     useEffect(() => {
         axios.get(baseUrl + 'all').then((res => {
-            //setUsers(Object.values(res.data))
             props.usersChangeHandler(Object.values(res.data))
         })).catch((err) => { 
             console.log(err)
@@ -87,10 +93,9 @@ export default function UserList(props) {
                     <h2>{user.phoneNumber}</h2>
 
                     <img src={EditIcon} onClick={() => handleUpdateUser(user)} />
-                    <img src={DeleteIcon} onClick={() => handleDeleteUser(user.id)} />
+                    <img src={DeleteIcon} onClick={() => handleDeleteUserPopup(user)} />
                     <img src={CalendarIcon} onClick={() => handleAppointment(user.id, user.firstName)} />
                 </div>
-                    //<UserItem key={idx} user={user} />
             ))}
             {
                 popup ?
@@ -103,7 +108,17 @@ export default function UserList(props) {
                         </div>
                     </div>
                     :
-                    <></>
+                    <></>                            
+            }
+            {
+                deleteUserPopup ?
+                <div className="edit-popup">
+                    <div className="popup">
+                        <UserPopup setPopup={setdeleteUserPopup} request={handleDeleteUser} userId={currentUser.id}  />
+                    </div>
+                </div> 
+                : 
+                <></>
             }
         </div>
     )
