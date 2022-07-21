@@ -33,7 +33,7 @@ export default function UserForm({user, setUser, request, setPopup, setCreateUse
             <div className="form-sections">
                 <div className="form-divider">
                     <label>Gender</label>
-                    <select name="gender">
+                    <select name="gender" value={user.gender} onChange={handleInputChange}>
                         <option value='MALE'>Male</option>
                         <option value='FEMALE'>Female</option>
                         <option value='OTHER'>Other</option>

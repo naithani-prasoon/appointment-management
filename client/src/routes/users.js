@@ -10,7 +10,7 @@ export default function Users() {
         <>
             <Navigation />
             <SearchUser users={users} usersChangeHandler={setUsers} />
-            <UserList users={users} usersChangeHandler={setUsers} />
+            <UserList users={users} handleSetUsers={setUsers} />
         </>
     )
 }
