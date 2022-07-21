@@ -2,6 +2,7 @@ package com.example.userservice.web.controller;
 
 import com.example.userservice.service.UserService;
 import com.example.userservice.web.model.GenderEnum;
+import com.example.userservice.web.model.NotFoundException;
 import com.example.userservice.web.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -20,6 +21,7 @@ import static org.mockito.BDDMockito.given;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.reset;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -57,16 +59,27 @@ class UserControllerTest {
 
     @Test
     void getUserById() throws Exception {
-        given(userService.selectUser(any(String.class))).willReturn(user);
+        given(userService.selectUser("1")).willReturn(user);
 
         MvcResult result = mockMvc.perform(get("/api/v1/user/" + user.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", is("John")))
                 .andExpect(jsonPath("$.lastName", is("Doe")))
                 .andExpect(jsonPath("$.age", is(25)))
-                .andExpect(jsonPath("$.emailAdress", is("JohnDoe@email.com")))
+                .andExpect(jsonPath("$.emailAddress", is("JohnDoe@email.com")))
                 .andExpect(jsonPath("$.phoneNumber", is("123456789")))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        System.out.println(result.getResponse().getContentAsString());
+    }
+
+    @Test
+    void getUserByIdThrowsNotFoundException() throws Exception {
+        when(userService.selectUser("2")).thenThrow(new NotFoundException("user not found"));
+
+        MvcResult result = mockMvc.perform(get("/api/v1/user/" + "2"))
+                .andExpect(status().is5xxServerError())
                 .andReturn();
 
         System.out.println(result.getResponse().getContentAsString());
@@ -127,6 +140,16 @@ class UserControllerTest {
         given(userService.deleteUser(any(String.class))).willReturn(null);
 
         mockMvc.perform(delete("/api/v1/user/" + user.getId()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getUserByFirstOrLastName() throws Exception {
+        given(userService.getUserByFirstOrLastName(any(String.class))).willReturn(List.of(user));
+
+        mockMvc.perform(get("/api/v1/user/")
+                .param("firstName", user.getFirstName())
+                .param("lastName", user.getLastName()))
                 .andExpect(status().isOk());
     }
 }

@@ -1,5 +1,4 @@
 import UserForm from "./UserForm";
-import Navigation from "../Navigation";
 import axios from "axios";
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useState } from "react";
@@ -9,7 +8,6 @@ export default function UpdateUserForm({passedUser, setPopup, edit}) {
     const baseUrl = 'http://localhost:8080/api/v1/user/'
     const nav = useNavigate()
     const { id } = useParams()
-    //const location = useLocation()
 
     const [user, setUser] = useState(passedUser)
 
@@ -25,7 +23,6 @@ export default function UpdateUserForm({passedUser, setPopup, edit}) {
 
         axios.put(baseUrl + user.id, params)
         .then((res) => {
-            //nav('/user/' + res.data.id)
             setPopup(false)
         })
         .catch((e) => {
