@@ -90,17 +90,17 @@ export default function AppointmentForm(props){
             <div className="form-sections">
                 <div className="form-divider">
                     <label>Appointment Name*</label>
-                    <input required={true} type={"text"} name={"name"} value={name} onChange={event => handleChange(event)}/>
+                    <input disabled={props.edit} pattern={"^d*[a-zA-Z][a-zA-Z0-9]*$"} title={"No Spaces"} required={true} type={"text"} name={"name"} value={name} onChange={event => handleChange(event)}/>
                 </div>
                 <div className="form-divider">
                     <label>Type*</label>
-                    <input required={true} type={"text"} name={"type"} value= {type} onChange={event => handleChange(event)}/>
+                    <input required={true} pattern={"^d*[a-zA-Z][a-zA-Z0-9]*$"} title={"No Spaces"}  type={"text"} name={"type"} value= {type} onChange={event => handleChange(event)}/>
                 </div>
             </div>
 
             <div className="form-divider">
                 <label>Description</label>
-                <textarea type={"text"} name={"description"} value={desc} onChange={event => handleChange(event)}/>
+                <textarea disabled={props.edit} type={"text"} name={"description"} value={desc} onChange={event => handleChange(event)}/>
             </div>
             <div className="form-sections">
                 <div className="form-divider">

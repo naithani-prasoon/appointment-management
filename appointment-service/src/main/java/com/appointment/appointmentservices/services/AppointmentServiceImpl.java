@@ -30,7 +30,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointments.getAppointmentStartTime(), appointments.getAppointmentEndTime(),
                 appointments.getAppointmentMetaData());
 
-        appointmentRepo.insert(newAppointment);
+        appointmentRepo.save(newAppointment);
 
         return newAppointment;
     }

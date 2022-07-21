@@ -5,6 +5,7 @@ import AppointmentForm from "./AppointmentForm";
 import EditIcon from '../Assets/edit.svg'
 import DeleteIcon from '../Assets/delete.svg'
 import {useLocation} from "react-router-dom";
+import {AppointmentFilter} from "./AppointmentFilter";
 
 export default function AppointmentTable() {
 
@@ -15,6 +16,7 @@ export default function AppointmentTable() {
 
     //pop up states
     const [popup, setPopup] = React.useState(false);
+    const [filter, setFilter] = React.useState(false);
     const [createAppointment, setCreateAppointment] = React.useState(false);
     const [editAppointment, setEditAppointment] = React.useState({name:'', type:'', description:'', start:'', end:''});
 
@@ -25,15 +27,22 @@ export default function AppointmentTable() {
         return [data['appointmentName'], data['appointmentType'], data['appointmentDescription'], data['appointmentStartTime'], data['appointmentEndTime'], data['id'], data['userID']];
     }
 
+    function handleFilters(){
+        setFilter(true);
+        setPopup(false);
+    }
+
     function handleEditClick(appointment){
         console.log(appointment)
         setEditAppointment(appointment);
         setPopup(true)
+        setFilter(false);
     }
 
     function handleCreateAppointment(){
         setPopup(true);
         setCreateAppointment(true);
+        setFilter(false)
     }
 
     function handleDeleteAppointment(appointment){
@@ -61,6 +70,7 @@ export default function AppointmentTable() {
     return(
             <div className="table">
                 <div className="action-buttons">
+                    <button onClick={() => handleFilters()} style={{background:"transparent", color:"black", marginRight:'10px'}}> Filters </button>
                     <button onClick={() => handleCreateAppointment()}> Create Appointment </button>
                 </div>
                 <div className="table-header">
@@ -86,11 +96,13 @@ export default function AppointmentTable() {
                     </div>
                 ))}
                 {
-                    popup ?
+                    popup || filter ?
                         <div className="edit-popup">
                             <div className="popup">
-                                {createAppointment ? <AppointmentForm edit={false} data={editAppointment}/> :
-                                    <AppointmentForm edit={true} data ={editAppointment}/>}
+                                {filter ? <AppointmentFilter setFilter={setFilter} /> :
+                                    createAppointment ? <AppointmentForm edit={false} data={editAppointment}/> :
+                                        <AppointmentForm edit={true} data ={editAppointment}/>
+                                }
                             </div>
                         </div>
                         :

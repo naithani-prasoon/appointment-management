@@ -2,6 +2,7 @@ package com.appointment.appointmentservices.web.contollers;
 
 import com.appointment.appointmentservices.web.model.Appointments;
 import com.appointment.appointmentservices.services.AppointmentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,15 @@ public class AppointmentController {
     }
 
     @GetMapping({"/{appointmentId}"})
-    public ResponseEntity<Appointments> getAppointment(@PathVariable("appointmentId") UUID appointmentId){
-        return new ResponseEntity<>(appointmentService.getApt(appointmentId), HttpStatus.OK);
+    public ResponseEntity getAppointment(@PathVariable("appointmentId") UUID appointmentId){
+        Appointments requestedAppointment = appointmentService.getApt(appointmentId);
+        if(requestedAppointment != null){
+            return new ResponseEntity<>(requestedAppointment, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping({"/getAll"})
@@ -33,8 +41,12 @@ public class AppointmentController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Appointments>> getUserAppointments(@RequestParam String userId){
-        return new ResponseEntity<>(appointmentService.getAptByUserID(userId), HttpStatus.OK);
+    public ResponseEntity getUserAppointments(@RequestParam String userId){
+        List<Appointments> userAppointmentList = appointmentService.getAptByUserID(userId);
+        if(userAppointmentList != null){
+           return new ResponseEntity<>(userAppointmentList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
@@ -50,6 +62,9 @@ public class AppointmentController {
 
     @PutMapping({"/{appointmentId}"})
     public ResponseEntity<?> handlePut(@PathVariable("appointmentId") UUID appointmentId, @Valid Appointments appointments){
+        if(appointmentService.getApt(appointmentId) == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         appointmentService.updateApt(appointmentId,appointments);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
