@@ -1,6 +1,5 @@
 import UserForm from "./UserForm";
 import axios from "axios";
-import { useNavigate  } from 'react-router-dom';
 import { useState } from "react";
 
 
@@ -16,7 +15,6 @@ export default function CreateUserForm({setPopup, setCreateUser, edit}) {
     })
     
     const baseUrl = 'http://localhost:8080/api/v1/user/'
-    const nav = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault();
