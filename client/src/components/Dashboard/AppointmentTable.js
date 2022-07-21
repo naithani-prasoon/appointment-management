@@ -65,6 +65,15 @@ export default function AppointmentTable() {
                 setRow(tempRow);
             }))
         }
+        else{
+            axios.get(baseUrl + '/getAll').then((res =>{
+                let tempRow = []
+                for(let info = 0; info < res.data.length; info++){
+                    tempRow.push(createData(res.data[info]))
+                }
+                setRow(tempRow);
+            }))
+        }
     }, [state])
 
     return(
@@ -73,7 +82,7 @@ export default function AppointmentTable() {
                     <button onClick={() => handleFilters()} style={{background:"transparent", color:"black", marginRight:'10px'}}> Filters </button>
                     <button onClick={() => handleCreateAppointment()}> Create Appointment </button>
                 </div>
-                <div className="table-header">
+                <div className="table-headers">
                     <h2> Name </h2>
                     <h2> Type </h2>
                     <h2> Description </h2>
@@ -85,7 +94,7 @@ export default function AppointmentTable() {
 
                 {row.map((row,index) => (
 
-                    <div className="table-appointments" key={index}>
+                    <div className="table-appointment" key={index}>
                         <h2 style={{textAlign:"left"}}>{row[0]}</h2>
                         <h2>{row[1]}</h2>
                         <h2 style={{textAlign:"left"}}>{row[2]}</h2>
