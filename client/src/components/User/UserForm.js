@@ -22,11 +22,11 @@ export default function UserForm({user, setUser, request, setPopup, setCreateUse
             <div className="form-sections">
                 <div className="form-divider">
                     <label>First Name</label>
-                    <input type={"text"} name={"firstName"} value={user.firstName} onChange={handleInputChange}/>
+                    <input type={"text"} name={"firstName"} required value={user.firstName} onChange={handleInputChange}/>
                 </div>
                 <div className="form-divider">
                     <label>Last Name</label>
-                    <input type={"text"} name={"lastName"} value={user.lastName} onChange={handleInputChange}/>
+                    <input type={"text"} name={"lastName"} required value={user.lastName} onChange={handleInputChange}/>
                 </div>
             </div>
 
@@ -41,7 +41,7 @@ export default function UserForm({user, setUser, request, setPopup, setCreateUse
                 </div>
                 <div className="form-divider">
                     <label>Age</label>
-                    <input type="number" name={"age"} value={user.age} onChange={handleInputChange}/>
+                    <input type="number" name={"age"} min={"0"} value={user.age} onChange={handleInputChange}/>
                 </div>
             </div>
 
