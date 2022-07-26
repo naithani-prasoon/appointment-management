@@ -1,7 +1,7 @@
 package com.example.userservice.web.controller;
 
 import com.example.userservice.service.UserService;
-import com.example.userservice.web.model.UserDto;
+import com.example.userservice.model.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +43,8 @@ public class UserController {
     }
 
     @DeleteMapping("{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
-        userService.deleteUser(userId);
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId, @RequestParam(defaultValue = "false") boolean hardDelete) {
+        userService.deleteUser(userId, hardDelete);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

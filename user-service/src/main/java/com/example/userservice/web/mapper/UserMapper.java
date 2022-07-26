@@ -1,8 +1,8 @@
 package com.example.userservice.web.mapper;
 
 
-import com.example.userservice.web.domain.User;
-import com.example.userservice.web.model.UserDto;
+import com.example.userservice.domain.User;
+import com.example.userservice.model.UserDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
