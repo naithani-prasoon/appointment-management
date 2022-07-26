@@ -1,9 +1,9 @@
 package com.example.userservice.web.controller;
 
 import com.example.userservice.service.UserService;
-import com.example.userservice.web.model.GenderEnum;
+import com.example.userservice.model.GenderEnum;
 import com.example.userservice.web.exception.NotFoundException;
-import com.example.userservice.web.model.UserDto;
+import com.example.userservice.model.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

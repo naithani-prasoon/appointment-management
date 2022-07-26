@@ -1,6 +1,6 @@
 package com.example.userservice.repository;
 
-import com.example.userservice.web.domain.User;
+import com.example.userservice.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

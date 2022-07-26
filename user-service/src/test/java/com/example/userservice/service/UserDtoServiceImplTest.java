@@ -2,7 +2,7 @@ package com.example.userservice.service;
 
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.web.exception.NotFoundException;
-import com.example.userservice.web.model.UserDto;
+import com.example.userservice.model.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,4 +1,4 @@
-package com.example.userservice.web.model;
+package com.example.userservice.model;
 
 public enum GenderEnum {
     MALE, FEMALE, OTHER

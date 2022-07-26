@@ -1,12 +1,14 @@
 package com.example.userservice.service;
 
+import com.example.userservice.domain.User;
+import com.example.userservice.model.UserDto;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.web.exception.NotFoundException;
 import com.example.userservice.web.mapper.UserMapper;
-import com.example.userservice.web.model.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,12 +19,18 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
+    public List<UserDto> listUser() {
+        List<User> userList = userRepository.findAll();
+        return filterList(userList);
+    }
+
+    @Override
     public UserDto selectUser(String id) {
-        UserDto userDto = userMapper.userToUserDto(userRepository.findUserById(id));
-        if (userDto == null) {
+        User user = userRepository.findUserById(id);
+        if (user == null || user.getIsDeleted()) {
             throw new NotFoundException("User not found");
         }
-        return userDto;
+        return userMapper.userToUserDto(user);
     }
 
     @Override
@@ -33,18 +41,15 @@ public class UserServiceImpl implements UserService {
         if (res.length == 2) {
             firstName = res[0];
             lastName = res[1];
-            return userMapper
-                    .userListToUserDtoList(userRepository.findUsersByFirstNameAndLastName(firstName, lastName));
+            return filterList(userRepository.findUsersByFirstNameAndLastName(firstName, lastName));
         } else if (res.length == 1 && !res[0].isEmpty()) {
-            List<UserDto> userDtoByFirstName = userMapper
-                    .userListToUserDtoList(userRepository.findUsersByFirstName(res[0]));
-            List<UserDto> userDtoByLastName = userMapper
-                    .userListToUserDtoList(userRepository.findUsersByLastName(res[0]));
+            List<UserDto> userDtoByFirstName = filterList(userRepository.findUsersByFirstName(res[0]));
+            List<UserDto> userDtoByLastName = filterList(userRepository.findUsersByLastName(res[0]));
 
-            if (userDtoByFirstName.size() != 0) return userDtoByFirstName;
+            if (!userDtoByFirstName.isEmpty()) return userDtoByFirstName;
             else return userDtoByLastName;
         } else {
-            return userMapper.userListToUserDtoList(userRepository.findAll());
+            return listUser();
         }
     }
 
@@ -62,14 +67,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto deleteUser(String id) {
-        UserDto userDto = userMapper.userToUserDto(userRepository.findUserById(id));
-        userRepository.deleteById(id);
-        return userDto;
+    public void deleteUser(String id, boolean hardDelete) {
+        if (hardDelete) {
+            userRepository.deleteById(id);
+        } else {
+            User user = userRepository.findUserById(id);
+            user.setIsDeleted(true);
+            userRepository.save(user);
+        }
     }
 
     @Override
-    public List<UserDto> listUser() {
-        return userMapper.userListToUserDtoList(userRepository.findAll());
+    public List<UserDto> filterList(List<User> userList) {
+        List<UserDto> filterList = new ArrayList<>();
+        for (User user: userList) {
+            Boolean isDeleted = user.getIsDeleted();
+            if (Boolean.FALSE.equals(isDeleted)) {
+                filterList.add(userMapper.userToUserDto(user));
+            }
+        }
+        return filterList;
     }
 }
