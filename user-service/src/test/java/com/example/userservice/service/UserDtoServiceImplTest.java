@@ -1,8 +1,8 @@
 package com.example.userservice.service;
 
 import com.example.userservice.repository.UserRepository;
-import com.example.userservice.web.model.NotFoundException;
-import com.example.userservice.web.model.User;
+import com.example.userservice.web.exception.NotFoundException;
+import com.example.userservice.web.model.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +19,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceImplTest {
+class UserDtoServiceImplTest {
 
     @Mock
     UserRepository userRepository;
@@ -30,11 +29,11 @@ class UserServiceImplTest {
     @InjectMocks
     UserServiceImpl userService;
 
-    User user;
+    UserDto userDto;
 
     @BeforeEach
     void setUp() {
-        user = User.builder()
+        userDto = UserDto.builder()
                 .id("1")
                 .firstName("John")
                 .lastName("Doe")
@@ -47,14 +46,14 @@ class UserServiceImplTest {
     @Test
     void selectUser() {
         //given
-        given(userRepository.findUserById("1")).willReturn(user);
+        given(userRepository.findUserById("1")).willReturn(userDto);
 
         //when
-        User foundUser = userService.selectUser("1");
+        UserDto foundUserDto = userService.selectUser("1");
 
         //then
         then(userRepository).should().findUserById(any(String.class));
-        assertThat(foundUser).isNotNull();
+        assertThat(foundUserDto).isNotNull();
     }
 
     @Test
@@ -72,26 +71,26 @@ class UserServiceImplTest {
     @Test
     void createUser() {
         //given
-        given(userRepository.save(any(User.class))).willReturn(user);
+        given(userRepository.save(any(UserDto.class))).willReturn(userDto);
 
         //when
-        User savedUser = userService.createUser(new User());
+        UserDto savedUserDto = userService.createUser(new UserDto());
 
         //then
-        then(userRepository).should().save(any(User.class));
-        assertThat(savedUser).isNotNull();
+        then(userRepository).should().save(any(UserDto.class));
+        assertThat(savedUserDto).isNotNull();
     }
 
     @Test
     void updateUser() {
         //given
-        given(userRepository.save(any(User.class))).willReturn(user);
+        given(userRepository.save(any(UserDto.class))).willReturn(userDto);
         //when
-        User savedUser = userService.updateUser("1", user);
+        UserDto savedUserDto = userService.updateUser("1", userDto);
 
         //then
-        then(userRepository).should().save(any(User.class));
-        assertThat(savedUser).isNotNull();
+        then(userRepository).should().save(any(UserDto.class));
+        assertThat(savedUserDto).isNotNull();
     }
 
     @Test
@@ -107,71 +106,71 @@ class UserServiceImplTest {
     @Test
     void listUser() {
         //given
-        List<User> users = new ArrayList<User>();
-        given(userRepository.findAll()).willReturn(users);
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        given(userRepository.findAll()).willReturn(userDtos);
 
         //when
         userService.listUser();
 
         //then
         then(userRepository).should().findAll();
-        assertThat(users).isNotNull();
+        assertThat(userDtos).isNotNull();
     }
 
     @Test
     void getUserByFirstAndLastName() {
         //given
-        List<User> users = new ArrayList<User>();
-        given(userRepository.findUsersByFirstNameAndLastName(anyString(), anyString())).willReturn(users);
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        given(userRepository.findUsersByFirstNameAndLastName(anyString(), anyString())).willReturn(userDtos);
 
         //when
-        userService.getUserByFirstOrLastName(user.getFirstName() + " " + user.getLastName());
+        userService.getUserByFirstOrLastName(userDto.getFirstName() + " " + userDto.getLastName());
 
         //then
         then(userRepository).should().findUsersByFirstNameAndLastName(anyString(), anyString());
-        assertThat(users).isNotNull();
+        assertThat(userDtos).isNotNull();
 
     }
 
     @Test
     void getUserByFirstName() {
         //given
-        List<User> users = new ArrayList<User>();
-        given(userRepository.findUsersByFirstName(anyString())).willReturn(users);
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        given(userRepository.findUsersByFirstName(anyString())).willReturn(userDtos);
 
         //when
-        userService.getUserByFirstOrLastName(user.getFirstName());
+        userService.getUserByFirstOrLastName(userDto.getFirstName());
 
         //then
         then(userRepository).should().findUsersByFirstName(anyString());
-        assertThat(users).isNotNull();
+        assertThat(userDtos).isNotNull();
     }
 
     @Test
     void getUserByLastName() {
         //given
-        List<User> users = new ArrayList<User>();
-        given(userRepository.findUsersByLastName(anyString())).willReturn(users);
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        given(userRepository.findUsersByLastName(anyString())).willReturn(userDtos);
 
         //when
-        userService.getUserByFirstOrLastName(user.getLastName());
+        userService.getUserByFirstOrLastName(userDto.getLastName());
 
         //then
         then(userRepository).should().findUsersByLastName(anyString());
-        assertThat(users).isNotNull();
+        assertThat(userDtos).isNotNull();
     }
 
     @Test
     void getUserByNoName() {
         //given
-        List<User> users = new ArrayList<User>();
-        given(userRepository.findAll()).willReturn(users);
+        List<UserDto> userDtos = new ArrayList<UserDto>();
+        given(userRepository.findAll()).willReturn(userDtos);
 
         //when
         userService.getUserByFirstOrLastName("");
 
         //then
         then(userRepository).should().findAll();
-        assertThat(users).isNotNull();
+        assertThat(userDtos).isNotNull();
     }
 }

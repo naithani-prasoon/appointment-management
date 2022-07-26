@@ -1,4 +1,4 @@
-package com.example.userservice.web.model;
+package com.example.userservice.web.exception;
 
 public class NotFoundException extends RuntimeException{
     public NotFoundException(String message) {

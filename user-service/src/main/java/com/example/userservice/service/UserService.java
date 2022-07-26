@@ -1,16 +1,15 @@
 package com.example.userservice.service;
 
-import com.example.userservice.web.model.User;
+import com.example.userservice.web.model.UserDto;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface UserService {
-    User selectUser(String id);
+    UserDto selectUser(String id);
 
-    List<User> getUserByFirstOrLastName(String name);
-    User createUser(User user);
-    User updateUser(String id, User user);
-    User deleteUser(String id);
-    List<User> listUser();
+    List<UserDto> getUserByFirstOrLastName(String name);
+    UserDto createUser(UserDto userDto);
+    UserDto updateUser(String id, UserDto userDto);
+    UserDto deleteUser(String id);
+    List<UserDto> listUser();
 }
