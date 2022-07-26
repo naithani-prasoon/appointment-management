@@ -1,0 +1,23 @@
+.search-bar{
+    width:100%;
+
+}
+
+.search-box{
+    width:1200px;
+    background: #ecf1f5;
+    border: none !important;
+    padding:32px 24px !important;
+    font-size:20px;
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.search-button{
+    background: #ecf1f5;
+    padding:32px 24px !important;
+    font-size:20px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    color: black;
+}

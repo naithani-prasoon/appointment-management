@@ -25,11 +25,12 @@ export default function SearchUser(props) {
 
     return(
         <>
-            <form onSubmit={submitHandler}>
+            <form className={"search-bar"} onSubmit={submitHandler}>
                 <div>
-                    <input type="text" placeholder="Name" name="name" value={name} onChange={nameChangeHandler}></input>
+                    <input className={"search-box"} type="text" placeholder="Name" name="name" value={name} onChange={nameChangeHandler}></input>
+                    <button className={"search-button"}>Search</button>
                 </div>
-                <button>Search</button>
+
             </form>
         </>
     )
