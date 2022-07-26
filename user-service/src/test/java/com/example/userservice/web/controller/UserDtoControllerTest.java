@@ -2,8 +2,8 @@ package com.example.userservice.web.controller;
 
 import com.example.userservice.service.UserService;
 import com.example.userservice.web.model.GenderEnum;
-import com.example.userservice.web.model.NotFoundException;
-import com.example.userservice.web.model.User;
+import com.example.userservice.web.exception.NotFoundException;
+import com.example.userservice.web.model.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 
 @WebMvcTest(UserController.class)
-class UserControllerTest {
+class UserDtoControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -38,11 +38,11 @@ class UserControllerTest {
     @MockBean
     UserService userService;
 
-    User user;
+    UserDto userDto;
 
     @BeforeEach
     void setUp() {
-        user = User.builder()
+        userDto = UserDto.builder()
                 .id("1")
                 .firstName("John")
                 .lastName("Doe")
@@ -59,9 +59,9 @@ class UserControllerTest {
 
     @Test
     void getUserById() throws Exception {
-        given(userService.selectUser("1")).willReturn(user);
+        given(userService.selectUser("1")).willReturn(userDto);
 
-        MvcResult result = mockMvc.perform(get("/api/v1/user/" + user.getId()))
+        MvcResult result = mockMvc.perform(get("/api/v1/user/" + userDto.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", is("John")))
                 .andExpect(jsonPath("$.lastName", is("Doe")))
@@ -87,7 +87,7 @@ class UserControllerTest {
 
     @Test
     void getAllUsers() throws Exception {
-        given(userService.listUser()).willReturn(List.of(user));
+        given(userService.listUser()).willReturn(List.of(userDto));
 
         MvcResult result = mockMvc.perform(get("/api/v1/user/all"))
                 .andExpect(status().isOk())
@@ -98,17 +98,17 @@ class UserControllerTest {
 
     @Test
     void addNewUser() throws Exception {
-        User newUser = User.builder().id("2").firstName("Henry").lastName("Cavil")
+        UserDto newUserDto = UserDto.builder().id("2").firstName("Henry").lastName("Cavil")
                 .age(21).gender(GenderEnum.MALE).build();
 
-        given(userService.createUser(any(User.class))).willReturn(newUser);
-        String userJson = objectMapper.writeValueAsString(newUser);
+        given(userService.createUser(any(UserDto.class))).willReturn(newUserDto);
+        String userJson = objectMapper.writeValueAsString(newUserDto);
 
         MvcResult result = mockMvc.perform(post("/api/v1/user")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                        .param("firstName", user.getFirstName())
-                        .param("lastName", user.getLastName())
-                        .param("age", String.valueOf(user.getAge())))
+                        .param("firstName", userDto.getFirstName())
+                        .param("lastName", userDto.getLastName())
+                        .param("age", String.valueOf(userDto.getAge())))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -117,17 +117,17 @@ class UserControllerTest {
 
     @Test
     void updateUser() throws Exception {
-        User newUser = User.builder().id("2").firstName("Henry").lastName("Cavil")
+        UserDto newUserDto = UserDto.builder().id("2").firstName("Henry").lastName("Cavil")
                 .age(21).gender(GenderEnum.MALE).build();
 
-        given(userService.createUser(any(User.class))).willReturn(newUser);
-        String userJson = objectMapper.writeValueAsString(newUser);
+        given(userService.createUser(any(UserDto.class))).willReturn(newUserDto);
+        String userJson = objectMapper.writeValueAsString(newUserDto);
 
-        MvcResult result = mockMvc.perform(put("/api/v1/user/" + user.getId())
+        MvcResult result = mockMvc.perform(put("/api/v1/user/" + userDto.getId())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("firstName", user.getFirstName())
-                        .param("lastName", user.getLastName())
-                        .param("age", String.valueOf(user.getAge())))
+                        .param("firstName", userDto.getFirstName())
+                        .param("lastName", userDto.getLastName())
+                        .param("age", String.valueOf(userDto.getAge())))
                         .andExpect(status().isOk())
                         .andReturn();
 
@@ -139,17 +139,17 @@ class UserControllerTest {
     void deleteUser() throws Exception {
         given(userService.deleteUser(any(String.class))).willReturn(null);
 
-        mockMvc.perform(delete("/api/v1/user/" + user.getId()))
+        mockMvc.perform(delete("/api/v1/user/" + userDto.getId()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserByFirstOrLastName() throws Exception {
-        given(userService.getUserByFirstOrLastName(any(String.class))).willReturn(List.of(user));
+        given(userService.getUserByFirstOrLastName(any(String.class))).willReturn(List.of(userDto));
 
         mockMvc.perform(get("/api/v1/user/")
-                .param("firstName", user.getFirstName())
-                .param("lastName", user.getLastName()))
+                .param("firstName", userDto.getFirstName())
+                .param("lastName", userDto.getLastName()))
                 .andExpect(status().isOk());
     }
 }

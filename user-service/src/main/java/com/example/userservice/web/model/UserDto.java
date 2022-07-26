@@ -5,31 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
-import javax.persistence.Id;
+
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document("user")
-//@Entity
-public class User {
-    //todo maybe implement DTO design
-    //todo maybe use UUID
+public class UserDto {
 
-    @Id
+    //This might interfere with tests
+    //@Null
     private String id;
 
-    @NotNull
-    @NotBlank(message = "please enter your first name")
+    @NotBlank(message = "first name cannot be blank")
     private String firstName;
 
-    @NotNull
-    @NotBlank(message = "please enter your last name")
+    @NotBlank(message = "last name cannot be blank")
     private String lastName;
 
     private GenderEnum gender;
