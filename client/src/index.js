@@ -6,8 +6,8 @@ import Login from './routes/login';
 import Dashboard from "./routes/dashboard";
 import Register from './routes/register';
 import Profile from './routes/profile';
-import Users from './routes/userDtos';
-import User from './routes/userDto';
+import Users from './routes/users';
+import User from './routes/user';
 import UpdateUserForm from './components/User/UpdateUserForm';
 
 import reportWebVitals from './reportWebVitals';
@@ -23,8 +23,8 @@ root.render(
         <Route path='/register' element = {<Register />} />
         <Route path = "/dashboard" element = {<Dashboard />} />
         <Route path = "/profile" element = {<Profile />} />
-        <Route path='/userDtos' element = {<Users />} />
-        <Route path='/userDto/:id' element = {<User />} />
+        <Route path='/users' element = {<Users />} />
+        <Route path='/user/:id' element = {<User />} />
         <Route path='/update/:id' element = {<UpdateUserForm />} />
       </Routes>
     </BrowserRouter>

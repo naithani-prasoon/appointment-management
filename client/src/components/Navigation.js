@@ -17,7 +17,7 @@ export default function Navigation() {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="/userDtos">
+                <NavLink className="nav-link" to="/users">
                   Users
                   <span className="sr-only">(current)</span>
                 </NavLink>
