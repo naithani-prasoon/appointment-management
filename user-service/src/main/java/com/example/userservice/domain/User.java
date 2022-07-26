@@ -1,6 +1,6 @@
-package com.example.userservice.web.domain;
+package com.example.userservice.domain;
 
-import com.example.userservice.web.model.GenderEnum;
+import com.example.userservice.model.GenderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,16 +19,13 @@ import javax.validation.constraints.PositiveOrZero;
 public class User {
     @Id
     private String id;
-
     private String firstName;
-
     private String lastName;
-
     private GenderEnum gender;
 
     @PositiveOrZero
     private Integer age;
-
     private String emailAddress;
     private String phoneNumber;
+    private Boolean isDeleted = Boolean.FALSE;
 }
