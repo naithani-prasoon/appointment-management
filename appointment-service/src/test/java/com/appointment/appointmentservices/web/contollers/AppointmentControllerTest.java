@@ -1,7 +1,7 @@
 package com.appointment.appointmentservices.web.contollers;
 
 import com.appointment.appointmentservices.services.AppointmentService;
-import com.appointment.appointmentservices.web.model.Appointments;
+import com.appointment.appointmentservices.model.AppointmentsDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +42,11 @@ class AppointmentControllerTest {
 
     @Test
     void getAllAppointments() throws Exception{
-        List<Appointments> appointmentsList = new ArrayList<>();
-        appointmentsList.add(getValidAppointment());
-        appointmentsList.add(getValidAppointment());
+        List<AppointmentsDto> appointmentsDtoList = new ArrayList<>();
+        appointmentsDtoList.add(getValidAppointment());
+        appointmentsDtoList.add(getValidAppointment());
 
-        given(appointmentService.getAptList()).willReturn(appointmentsList);
+        given(appointmentService.getAptList()).willReturn(appointmentsDtoList);
 
         mockMvc.perform(get("/api/v1/appointments/getAll").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -62,11 +62,11 @@ class AppointmentControllerTest {
 
     @Test
     void getAppointmentByUserId() throws Exception{
-        List<Appointments> appointmentsList = new ArrayList<>();
-        appointmentsList.add(getValidAppointment());
-        appointmentsList.add(getValidAppointment());
+        List<AppointmentsDto> appointmentsDtoList = new ArrayList<>();
+        appointmentsDtoList.add(getValidAppointment());
+        appointmentsDtoList.add(getValidAppointment());
 
-        given(appointmentService.getAptByUserID(any())).willReturn(appointmentsList);
+        given(appointmentService.getAptByUserID(any())).willReturn(appointmentsDtoList);
 
         mockMvc.perform(get("/api/v1/appointments?userId=54").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -84,17 +84,17 @@ class AppointmentControllerTest {
     @Test
     void handlePost() throws Exception {
 
-        Appointments appointments = getValidAppointment();
-        given(appointmentService.createApt(any(Appointments.class))).willReturn(appointments);
+        AppointmentsDto appointmentsDto = getValidAppointment();
+        given(appointmentService.createApt(any(AppointmentsDto.class))).willReturn(appointmentsDto);
 
         mockMvc.perform(post("/api/v1/appointments/")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                    .param("appointmentName",appointments.getAppointmentName())
-                    .param("userID",appointments.getUserID())
-                    .param("appointmentType",appointments.getAppointmentType())
-                    .param("appointmentDescription",appointments.getAppointmentDescription())
-                    .param("appointmentStartTime",appointments.getAppointmentStartTime())
-                    .param("appointmentEndTime",appointments.getAppointmentEndTime()))
+                    .param("appointmentName", appointmentsDto.getAppointmentName())
+                    .param("userID", appointmentsDto.getUserID())
+                    .param("appointmentType", appointmentsDto.getAppointmentType())
+                    .param("appointmentDescription", appointmentsDto.getAppointmentDescription())
+                    .param("appointmentStartTime", appointmentsDto.getAppointmentStartTime())
+                    .param("appointmentEndTime", appointmentsDto.getAppointmentEndTime()))
                 .andExpect(status().isCreated());
     }
 
@@ -103,42 +103,42 @@ class AppointmentControllerTest {
     @Test
     void handleNonValidPutID() throws Exception{
         UUID randomUID = UUID.randomUUID();
-        Appointments appointments = getValidAppointment();
+        AppointmentsDto appointmentsDto = getValidAppointment();
 
         given(appointmentService.updateApt(randomUID, getValidAppointment())).willReturn(null);
         mockMvc.perform(put("/api/v1/appointments/" + randomUID)
-                .param("appointmentName",appointments.getAppointmentName())
-                .param("userID",appointments.getUserID())
-                .param("appointmentType",appointments.getAppointmentType())
-                .param("appointmentDescription",appointments.getAppointmentDescription())
-                .param("appointmentStartTime",appointments.getAppointmentStartTime())
-                .param("appointmentEndTime",appointments.getAppointmentEndTime()))
+                .param("appointmentName", appointmentsDto.getAppointmentName())
+                .param("userID", appointmentsDto.getUserID())
+                .param("appointmentType", appointmentsDto.getAppointmentType())
+                .param("appointmentDescription", appointmentsDto.getAppointmentDescription())
+                .param("appointmentStartTime", appointmentsDto.getAppointmentStartTime())
+                .param("appointmentEndTime", appointmentsDto.getAppointmentEndTime()))
                 .andExpect(status().isNotFound());
     }
 
     //Handling not null tests
     @Test
     void handleNotValidPut() throws Exception{
-        given(appointmentService.updateApt(any(), any(Appointments.class))).willReturn(getValidAppointment());
+        given(appointmentService.updateApt(any(), any(AppointmentsDto.class))).willReturn(getValidAppointment());
 
-        Appointments appointments = getValidAppointment();
+        AppointmentsDto appointmentsDto = getValidAppointment();
 
         mockMvc.perform(put("/api/v1/appointments/" + UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                        .param("appointmentName",appointments.getAppointmentName())
-                        .param("appointmentType",appointments.getAppointmentType())
-                        .param("appointmentDescription",appointments.getAppointmentDescription())
-                        .param("appointmentStartTime",appointments.getAppointmentStartTime())
-                        .param("appointmentEndTime",appointments.getAppointmentEndTime()))
+                        .param("appointmentName", appointmentsDto.getAppointmentName())
+                        .param("appointmentType", appointmentsDto.getAppointmentType())
+                        .param("appointmentDescription", appointmentsDto.getAppointmentDescription())
+                        .param("appointmentStartTime", appointmentsDto.getAppointmentStartTime())
+                        .param("appointmentEndTime", appointmentsDto.getAppointmentEndTime()))
                 .andExpect(status().isBadRequest());
 
         mockMvc.perform(put("/api/v1/appointments/" + UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                        .param("userID", appointments.getUserID())
-                        .param("appointmentName",appointments.getAppointmentName())
-                        .param("appointmentDescription",appointments.getAppointmentDescription())
-                        .param("appointmentStartTime",appointments.getAppointmentStartTime())
-                        .param("appointmentEndTime",appointments.getAppointmentEndTime()))
+                        .param("userID", appointmentsDto.getUserID())
+                        .param("appointmentName", appointmentsDto.getAppointmentName())
+                        .param("appointmentDescription", appointmentsDto.getAppointmentDescription())
+                        .param("appointmentStartTime", appointmentsDto.getAppointmentStartTime())
+                        .param("appointmentEndTime", appointmentsDto.getAppointmentEndTime()))
                 .andExpect(status().isBadRequest());
     }
 
@@ -146,24 +146,24 @@ class AppointmentControllerTest {
     @Test
     void handlePut() throws Exception{
         given(appointmentService.getApt(any(UUID.class))).willReturn(getValidAppointment());
-        given(appointmentService.updateApt(any(UUID.class), any(Appointments.class))).willReturn(getValidAppointment());
+        given(appointmentService.updateApt(any(UUID.class), any(AppointmentsDto.class))).willReturn(getValidAppointment());
 
-        Appointments appointments = getValidAppointment();
+        AppointmentsDto appointmentsDto = getValidAppointment();
 
-        mockMvc.perform(put("/api/v1/appointments/" + appointments.getId().toString())
+        mockMvc.perform(put("/api/v1/appointments/" + appointmentsDto.getId().toString())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                        .param("appointmentName",appointments.getAppointmentName())
-                        .param("userID",appointments.getUserID())
-                        .param("appointmentType",appointments.getAppointmentType())
-                        .param("appointmentDescription",appointments.getAppointmentDescription())
-                        .param("appointmentStartTime",appointments.getAppointmentStartTime())
-                        .param("appointmentEndTime",appointments.getAppointmentEndTime()))
+                        .param("appointmentName", appointmentsDto.getAppointmentName())
+                        .param("userID", appointmentsDto.getUserID())
+                        .param("appointmentType", appointmentsDto.getAppointmentType())
+                        .param("appointmentDescription", appointmentsDto.getAppointmentDescription())
+                        .param("appointmentStartTime", appointmentsDto.getAppointmentStartTime())
+                        .param("appointmentEndTime", appointmentsDto.getAppointmentEndTime()))
                 .andExpect(status().isNoContent());
     }
 
 
-    Appointments getValidAppointment(){
-        return Appointments.builder()
+    AppointmentsDto getValidAppointment(){
+        return AppointmentsDto.builder()
                 .id(UUID.randomUUID())
                 .userID("54")
                 .appointmentName("Prasoon's Dental Appointment")

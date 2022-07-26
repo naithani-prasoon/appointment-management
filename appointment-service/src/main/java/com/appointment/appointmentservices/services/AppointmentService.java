@@ -1,21 +1,23 @@
 package com.appointment.appointmentservices.services;
 
-import com.appointment.appointmentservices.web.model.Appointments;
+import com.appointment.appointmentservices.model.AppointmentsDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface AppointmentService {
 
-    List<Appointments> getAptList();
+    List<AppointmentsDto> getAptList();
 
-    Appointments createApt(Appointments appointments);
+    AppointmentsDto createApt(AppointmentsDto appointmentsDto);
 
-    Appointments updateApt(UUID id, Appointments appointments);
+    AppointmentsDto updateApt(UUID id, AppointmentsDto appointmentsDto);
 
-    Appointments getApt(UUID id);
+    AppointmentsDto getApt(UUID id);
 
     void deleteApt(UUID id);
 
-    List<Appointments> getAptByUserID(String userId);
+    void deleteAptByUserId(String userId);
+
+    List<AppointmentsDto> getAptByUserID(String userId);
 }

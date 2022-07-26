@@ -1,7 +1,8 @@
 package com.appointment.appointmentservices.services;
 
 import com.appointment.appointmentservices.repo.AppointmentRepo;
-import com.appointment.appointmentservices.web.model.Appointments;
+import com.appointment.appointmentservices.model.AppointmentsDto;
+import com.appointment.appointmentservices.web.mapper.AppointmentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,65 +14,79 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
 
-    @Autowired
+    private final AppointmentMapper appointmentMapper;
+
     private final AppointmentRepo appointmentRepo;
 
     @Override
-    public List<Appointments> getAptList() {
-        return appointmentRepo.findAll();
+    public List<AppointmentsDto> getAptList() {
+        return appointmentMapper.toAppointmentsDtoList(appointmentRepo.findAll());
     }
 
     @Override
-    public Appointments createApt(Appointments appointments) {
+    public AppointmentsDto createApt(AppointmentsDto appointmentsDto) {
 
-        Appointments newAppointment = new Appointments(UUID.randomUUID(),
-                appointments.getUserID(), appointments.getAppointmentName(),
-                appointments.getAppointmentType(), appointments.getAppointmentDescription(),
-                appointments.getAppointmentStartTime(), appointments.getAppointmentEndTime(),
-                appointments.getAppointmentMetaData());
+        AppointmentsDto newAppointment = new AppointmentsDto(UUID.randomUUID(),
+                appointmentsDto.getUserID(), appointmentsDto.getAppointmentName(),
+                appointmentsDto.getAppointmentType(), appointmentsDto.getAppointmentDescription(),
+                appointmentsDto.getAppointmentStartTime(), appointmentsDto.getAppointmentEndTime(),
+                appointmentsDto.getAppointmentMetaData(), false);
 
-        appointmentRepo.save(newAppointment);
+        appointmentRepo.save(appointmentMapper.toAppointments(newAppointment));
 
         return newAppointment;
     }
 
     @Override
-    public Appointments updateApt(UUID id, Appointments appointments) {
+    public AppointmentsDto updateApt(UUID id, AppointmentsDto appointmentsDto) {
         //will implement later
-        Appointments toBeUpdated = appointmentRepo.findAppointmentById(id);
+        AppointmentsDto toBeUpdated = appointmentMapper.toDto(appointmentRepo.findAppointmentById(id));
 
-        if (appointments.getAppointmentStartTime() != null){
-            toBeUpdated.setAppointmentStartTime(appointments.getAppointmentStartTime());
+        if (appointmentsDto.getAppointmentStartTime() != null){
+            toBeUpdated.setAppointmentStartTime(appointmentsDto.getAppointmentStartTime());
         }
 
-        if (appointments.getAppointmentEndTime() != null){
-            toBeUpdated.setAppointmentEndTime(appointments.getAppointmentEndTime());
+        if (appointmentsDto.getAppointmentEndTime() != null){
+            toBeUpdated.setAppointmentEndTime(appointmentsDto.getAppointmentEndTime());
         }
 
-        if (appointments.getAppointmentType() != null){
-            toBeUpdated.setAppointmentType(appointments.getAppointmentType());
+        if (appointmentsDto.getAppointmentType() != null){
+            toBeUpdated.setAppointmentType(appointmentsDto.getAppointmentType());
         }
 
-        appointmentRepo.save(toBeUpdated);
+        appointmentRepo.save(appointmentMapper.toAppointments(toBeUpdated));
 
         return toBeUpdated;
 
     }
 
     @Override
-    public Appointments getApt(UUID id) {
+    public AppointmentsDto getApt(UUID id) {
       //will implement with real data
-        return appointmentRepo.findAppointmentById(id);
+        return appointmentMapper.toDto(appointmentRepo.findAppointmentById(id));
     };
 
     @Override
     public void deleteApt(UUID id) {
         //will implement later
-        appointmentRepo.deleteById(id);
+        AppointmentsDto toBeUpdated = appointmentMapper.toDto(appointmentRepo.findAppointmentById(id));
+
+        toBeUpdated.setSoftDelete(true);
+        appointmentRepo.save(appointmentMapper.toAppointments(toBeUpdated));
     }
 
     @Override
-    public List<Appointments> getAptByUserID(String userId) {
-        return appointmentRepo.findByUserID(userId);
+    public void deleteAptByUserId(String userId) {
+        List<AppointmentsDto> appointmentsDtoList = getAptByUserID(userId);
+
+        for(AppointmentsDto appointmentDto: appointmentsDtoList){
+            appointmentDto.setSoftDelete(true);
+            appointmentRepo.save(appointmentMapper.toAppointments(appointmentDto));
+        }
+    }
+
+    @Override
+    public List<AppointmentsDto> getAptByUserID(String userId) {
+        return appointmentMapper.toAppointmentsDtoList(appointmentRepo.findByUserID(userId));
     }
 }

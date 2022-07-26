@@ -1,7 +1,7 @@
 package com.appointment.appointmentservices.services;
 
 import com.appointment.appointmentservices.repo.AppointmentRepo;
-import com.appointment.appointmentservices.web.model.Appointments;
+import com.appointment.appointmentservices.model.AppointmentsDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,8 +28,8 @@ class AppointmentServiceImplTest {
     @InjectMocks
     AppointmentServiceImpl appointmentService;
 
-    Appointments getValidAppointment(){
-        return Appointments.builder()
+    AppointmentsDto getValidAppointment(){
+        return AppointmentsDto.builder()
                 .id(UUID.fromString("e692ab86-0920-11ed-861d-0242ac120002"))
                 .userID("54")
                 .appointmentName("Prasoon's Dental Appointment")
@@ -44,7 +44,7 @@ class AppointmentServiceImplTest {
 
     @Test
     void getAptList() {
-        List<Appointments> listOfAppointments = new ArrayList<>();
+        List<AppointmentsDto> listOfAppointments = new ArrayList<>();
         listOfAppointments.add(getValidAppointment());
         listOfAppointments.add(getValidAppointment());
 
@@ -52,7 +52,7 @@ class AppointmentServiceImplTest {
         given(appointmentRepo.findAll()).willReturn(listOfAppointments);
 
         //when
-        List<Appointments> allAppointments = appointmentService.getAptList();
+        List<AppointmentsDto> allAppointments = appointmentService.getAptList();
 
         //then
         then(appointmentRepo).should().findAll();
@@ -62,14 +62,14 @@ class AppointmentServiceImplTest {
     @Test
     void createApt() {
         //given
-        Appointments appointments = new Appointments();
-        given(appointmentRepo.save(any(Appointments.class))).willReturn(appointments);
+        AppointmentsDto appointmentsDto = new AppointmentsDto();
+        given(appointmentRepo.save(any(AppointmentsDto.class))).willReturn(appointmentsDto);
 
         //when
-        Appointments createdAppointment = appointmentService.createApt(new Appointments());
+        AppointmentsDto createdAppointment = appointmentService.createApt(new AppointmentsDto());
 
         //then
-        then(appointmentRepo).should().save(any(Appointments.class));
+        then(appointmentRepo).should().save(any(AppointmentsDto.class));
         assertThat(createdAppointment).isNotNull();
 
     }
@@ -79,10 +79,10 @@ class AppointmentServiceImplTest {
 
         //given
         when(appointmentRepo.findAppointmentById(UUID.fromString("e692ab86-0920-11ed-861d-0242ac120002"))).thenReturn(getValidAppointment());
-        when(appointmentRepo.save(any(Appointments.class))).thenReturn(getValidAppointment());
+        when(appointmentRepo.save(any(AppointmentsDto.class))).thenReturn(getValidAppointment());
 
         //when
-        Appointments updatedAppointment = appointmentService.updateApt(UUID.fromString("e692ab86-0920-11ed-861d-0242ac120002"), getValidAppointment());
+        AppointmentsDto updatedAppointment = appointmentService.updateApt(UUID.fromString("e692ab86-0920-11ed-861d-0242ac120002"), getValidAppointment());
 
         //then
         then(appointmentRepo).should().save(getValidAppointment());
@@ -95,16 +95,18 @@ class AppointmentServiceImplTest {
         given(appointmentRepo.findAppointmentById(any())).willReturn(getValidAppointment());
 
         //when
-        Appointments appointmentsById = appointmentService.getApt(any());
+        AppointmentsDto appointmentsDtoById = appointmentService.getApt(any());
 
         //then
         then(appointmentRepo).should().findAppointmentById(any());
-        assertThat(appointmentsById).isNotNull();
+        assertThat(appointmentsDtoById).isNotNull();
     }
 
+    //AppointmentsDto Error
+    //Will resolve this later
     @Test
     void getAptByUserID() {
-        List<Appointments> listOfAppointments = new ArrayList<>();
+        List<AppointmentsDto> listOfAppointments = new ArrayList<>();
         listOfAppointments.add(getValidAppointment());
         listOfAppointments.add(getValidAppointment());
 
@@ -112,10 +114,10 @@ class AppointmentServiceImplTest {
         given(appointmentRepo.findByUserID(any())).willReturn(listOfAppointments);
 
         //when
-        List<Appointments> appointmentsById = appointmentService.getAptByUserID(any());
+        List<AppointmentsDto> appointmentsDtoById = appointmentService.getAptByUserID(any());
 
         //then
         then(appointmentRepo).should().findByUserID(any());
-        assertThat(appointmentsById).isNotNull();
+        assertThat(appointmentsDtoById).isNotNull();
     }
 }

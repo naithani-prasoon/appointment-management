@@ -71,7 +71,7 @@ export default function UserItem(props) {
             </div>
             
             {props.users.map((user) => (
-                <div className="table-appointments">
+                <div className="table-appointmentsDto">
                     <h2 style={{textAlign:"center"}}>{user.firstName}</h2>
                     <h2 style={{textAlign:"center"}}>{user.lastName}</h2>
                     <h2>{user.age}</h2>
