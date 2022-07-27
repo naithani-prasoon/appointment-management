@@ -5,8 +5,10 @@ import com.example.userservice.model.UserDto;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.web.exception.NotFoundException;
 import com.example.userservice.web.mapper.UserMapper;
+import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final UserMapper mapper;
+
+    WebClient webClient = WebClient.create("http://localhost:8081");
 
     @Override
     public List<UserDto> listUser() {
@@ -30,7 +34,7 @@ public class UserServiceImpl implements UserService {
         if (user == null || user.getIsDeleted()) {
             throw new NotFoundException("User not found");
         }
-        return userMapper.userToUserDto(user);
+        return mapper.userToUserDto(user);
     }
 
     @Override
@@ -56,14 +60,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         //save as user entity and return as userDto
-        return userMapper.userToUserDto(userRepository.save(userMapper.userDtoToUser(userDto)));
+        User user = new User();
+        try {
+            user = userRepository.save(mapper.userDtoToUser(userDto));
+        }
+        catch (DuplicateKeyException ex) {
+            throw new com.example.userservice.web.exception.DuplicateKeyException("duplicate email");
+        }
+        return mapper.userToUserDto(user);
     }
 
     @Override
     public UserDto updateUser(String id, UserDto userDto) {
         userDto.setId(id);
         //save as user entity and return as userDto
-        return userMapper.userToUserDto(userRepository.save(userMapper.userDtoToUser(userDto)));
+        return mapper.userToUserDto(userRepository.save(mapper.userDtoToUser(userDto)));
     }
 
     @Override
@@ -75,6 +86,10 @@ public class UserServiceImpl implements UserService {
             user.setIsDeleted(true);
             userRepository.save(user);
         }
+        webClient.delete()
+                .uri("/api/v1/appointments/delete-user/" + id)
+                .retrieve()
+                .bodyToMono(Void.class);
     }
 
     @Override
@@ -83,7 +98,7 @@ public class UserServiceImpl implements UserService {
         for (User user: userList) {
             Boolean isDeleted = user.getIsDeleted();
             if (Boolean.FALSE.equals(isDeleted)) {
-                filterList.add(userMapper.userToUserDto(user));
+                filterList.add(mapper.userToUserDto(user));
             }
         }
         return filterList;
