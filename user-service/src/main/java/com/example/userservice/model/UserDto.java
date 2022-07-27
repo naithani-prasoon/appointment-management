@@ -30,6 +30,7 @@ public class UserDto {
     @PositiveOrZero
     private Integer age;
 
+    @NotBlank(message = "email cannot be blank")
     private String emailAddress;
     private String phoneNumber;
 

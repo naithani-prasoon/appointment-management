@@ -5,7 +5,6 @@ import com.example.userservice.model.UserDto;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.web.exception.NotFoundException;
 import com.example.userservice.web.mapper.UserMapper;
-import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -60,14 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         //save as user entity and return as userDto
-        User user = new User();
-        try {
-            user = userRepository.save(mapper.userDtoToUser(userDto));
-        }
-        catch (DuplicateKeyException ex) {
-            throw new com.example.userservice.web.exception.DuplicateKeyException("duplicate email");
-        }
-        return mapper.userToUserDto(user);
+        return mapper.userToUserDto(userRepository.save(mapper.userDtoToUser(userDto)));
     }
 
     @Override
