@@ -1,7 +1,6 @@
 package com.appointment.appointmentservices.repo;
 
 import com.appointment.appointmentservices.domain.Appointments;
-import com.appointment.appointmentservices.model.AppointmentsDto;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

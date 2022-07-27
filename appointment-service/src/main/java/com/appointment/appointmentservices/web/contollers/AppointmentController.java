@@ -2,6 +2,8 @@ package com.appointment.appointmentservices.web.contollers;
 
 import com.appointment.appointmentservices.model.AppointmentsDto;
 import com.appointment.appointmentservices.services.AppointmentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/appointments")
 @RestController
 public class AppointmentController {
+
 
     private final AppointmentService appointmentService;
 
@@ -53,10 +56,9 @@ public class AppointmentController {
         System.out.println(appointmentsDto);
         AppointmentsDto createAppointment = appointmentService.createApt(appointmentsDto);
         HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;");
 
-        headers.add("Location","api/v1/appointments/"+ createAppointment.getId().toString());
-
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(createAppointment, headers, HttpStatus.CREATED);
     }
 
     @PutMapping({"/{appointmentId}"})

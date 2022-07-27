@@ -1,5 +1,6 @@
 package com.appointment.appointmentservices.services;
 
+import com.appointment.appointmentservices.domain.Appointments;
 import com.appointment.appointmentservices.repo.AppointmentRepo;
 import com.appointment.appointmentservices.model.AppointmentsDto;
 import com.appointment.appointmentservices.web.mapper.AppointmentMapper;
@@ -16,6 +17,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentMapper appointmentMapper;
 
+    @Autowired
     private final AppointmentRepo appointmentRepo;
 
     @Override
@@ -25,7 +27,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentsDto createApt(AppointmentsDto appointmentsDto) {
-
+        //Had to implement this way as there was an issue with the id with mongoDb
         AppointmentsDto newAppointment = new AppointmentsDto(UUID.randomUUID(),
                 appointmentsDto.getUserID(), appointmentsDto.getAppointmentName(),
                 appointmentsDto.getAppointmentType(), appointmentsDto.getAppointmentDescription(),
@@ -39,44 +41,46 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public AppointmentsDto updateApt(UUID id, AppointmentsDto appointmentsDto) {
-        //will implement later
-        AppointmentsDto toBeUpdated = appointmentMapper.toDto(appointmentRepo.findAppointmentById(id));
+        //Only update type and time of appointment
+        Appointments toBeUpdated = appointmentRepo.findAppointmentById(id);
+        Appointments updatedAppointment = appointmentMapper.toAppointments(appointmentsDto);
 
-        if (appointmentsDto.getAppointmentStartTime() != null){
-            toBeUpdated.setAppointmentStartTime(appointmentsDto.getAppointmentStartTime());
+        if (updatedAppointment.getAppointmentStartTime() != null){
+            toBeUpdated.setAppointmentStartTime(updatedAppointment.getAppointmentStartTime());
         }
 
-        if (appointmentsDto.getAppointmentEndTime() != null){
-            toBeUpdated.setAppointmentEndTime(appointmentsDto.getAppointmentEndTime());
+        if (updatedAppointment.getAppointmentEndTime() != null){
+            toBeUpdated.setAppointmentEndTime(updatedAppointment.getAppointmentEndTime());
         }
 
-        if (appointmentsDto.getAppointmentType() != null){
-            toBeUpdated.setAppointmentType(appointmentsDto.getAppointmentType());
+        if (updatedAppointment.getAppointmentType() != null){
+            toBeUpdated.setAppointmentType(updatedAppointment.getAppointmentType());
         }
 
-        appointmentRepo.save(appointmentMapper.toAppointments(toBeUpdated));
+        appointmentRepo.save(toBeUpdated);
 
-        return toBeUpdated;
+        return appointmentMapper.toDto(updatedAppointment);
 
     }
 
     @Override
     public AppointmentsDto getApt(UUID id) {
-      //will implement with real data
+      //Fetch appointment using ID
         return appointmentMapper.toDto(appointmentRepo.findAppointmentById(id));
-    };
+    }
 
     @Override
     public void deleteApt(UUID id) {
-        //will implement later
-        AppointmentsDto toBeUpdated = appointmentMapper.toDto(appointmentRepo.findAppointmentById(id));
+        //Soft delete
+        Appointments toBeUpdated = appointmentRepo.findAppointmentById(id);
 
         toBeUpdated.setSoftDelete(true);
-        appointmentRepo.save(appointmentMapper.toAppointments(toBeUpdated));
+        appointmentRepo.save(toBeUpdated);
     }
 
     @Override
     public void deleteAptByUserId(String userId) {
+        //Sim. delete appointments if a user is deleted (soft/hard)
         List<AppointmentsDto> appointmentsDtoList = getAptByUserID(userId);
 
         for(AppointmentsDto appointmentDto: appointmentsDtoList){
@@ -87,6 +91,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<AppointmentsDto> getAptByUserID(String userId) {
+        //Fetches appointment on the basis of userId
         return appointmentMapper.toAppointmentsDtoList(appointmentRepo.findByUserID(userId));
     }
 }

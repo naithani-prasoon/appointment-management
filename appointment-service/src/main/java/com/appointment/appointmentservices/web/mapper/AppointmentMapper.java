@@ -3,6 +3,7 @@ package com.appointment.appointmentservices.web.mapper;
 import com.appointment.appointmentservices.domain.Appointments;
 import com.appointment.appointmentservices.model.AppointmentsDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 
