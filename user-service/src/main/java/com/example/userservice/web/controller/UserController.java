@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping(path="/api/v1/user")
+@RequestMapping(path="${service.api.path}")
 public class UserController {
     private final UserService userService;
 

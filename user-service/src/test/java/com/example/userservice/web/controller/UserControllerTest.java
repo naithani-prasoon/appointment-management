@@ -1,9 +1,8 @@
 package com.example.userservice.web.controller;
 
-import com.example.userservice.service.UserService;
 import com.example.userservice.model.GenderEnum;
-import com.example.userservice.web.exception.NotFoundException;
 import com.example.userservice.model.UserDto;
+import com.example.userservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,17 +16,16 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.reset;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.reset;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(UserController.class)
-class UserDtoControllerTest {
+class UserControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -75,17 +73,6 @@ class UserDtoControllerTest {
     }
 
     @Test
-    void getUserByIdThrowsNotFoundException() throws Exception {
-        when(userService.selectUser("2")).thenThrow(new NotFoundException("user not found"));
-
-        MvcResult result = mockMvc.perform(get("/api/v1/user/" + "2"))
-                .andExpect(status().is5xxServerError())
-                .andReturn();
-
-        System.out.println(result.getResponse().getContentAsString());
-    }
-
-    @Test
     void getAllUsers() throws Exception {
         given(userService.listUser()).willReturn(List.of(userDto));
 
@@ -99,7 +86,7 @@ class UserDtoControllerTest {
     @Test
     void addNewUser() throws Exception {
         UserDto newUserDto = UserDto.builder().id("2").firstName("Henry").lastName("Cavil")
-                .age(21).gender(GenderEnum.MALE).build();
+                .age(21).gender(GenderEnum.MALE).emailAddress("test@email.com").build();
 
         given(userService.createUser(any(UserDto.class))).willReturn(newUserDto);
         String userJson = objectMapper.writeValueAsString(newUserDto);
@@ -108,6 +95,7 @@ class UserDtoControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                         .param("firstName", userDto.getFirstName())
                         .param("lastName", userDto.getLastName())
+                        .param("emailAddress", newUserDto.getEmailAddress())
                         .param("age", String.valueOf(userDto.getAge())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -118,7 +106,7 @@ class UserDtoControllerTest {
     @Test
     void updateUser() throws Exception {
         UserDto newUserDto = UserDto.builder().id("2").firstName("Henry").lastName("Cavil")
-                .age(21).gender(GenderEnum.MALE).build();
+                .age(21).gender(GenderEnum.MALE).emailAddress("test@email.com").build();
 
         given(userService.createUser(any(UserDto.class))).willReturn(newUserDto);
         String userJson = objectMapper.writeValueAsString(newUserDto);
@@ -127,6 +115,7 @@ class UserDtoControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("firstName", userDto.getFirstName())
                         .param("lastName", userDto.getLastName())
+                        .param("emailAddress", newUserDto.getEmailAddress())
                         .param("age", String.valueOf(userDto.getAge())))
                         .andExpect(status().isOk())
                         .andReturn();
@@ -137,10 +126,9 @@ class UserDtoControllerTest {
 
     @Test
     void deleteUser() throws Exception {
-        given(userService.deleteUser(any(String.class))).willReturn(null);
 
         mockMvc.perform(delete("/api/v1/user/" + userDto.getId()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
