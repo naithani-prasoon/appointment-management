@@ -5,11 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import javax.validation.constraints.PositiveOrZero;
-
 
 @Data
 @NoArgsConstructor
@@ -25,6 +25,8 @@ public class User {
 
     @PositiveOrZero
     private Integer age;
+
+    @Indexed(unique = true)
     private String emailAddress;
     private String phoneNumber;
     private Boolean isDeleted = Boolean.FALSE;

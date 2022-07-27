@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId){
+    public ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId) {
         return new ResponseEntity<>(userService.selectUser(userId), HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class UserController {
 
     @PutMapping(value = "/{userId}")
     public ResponseEntity<UserDto> updateUser(@PathVariable String userId, @Valid UserDto userDto) {
-        return new ResponseEntity<>(userService.updateUser(userId, userDto), HttpStatus.OK) ;
+        return new ResponseEntity<>(userService.updateUser(userId, userDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{userId}")
