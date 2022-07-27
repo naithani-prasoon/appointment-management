@@ -13,7 +13,7 @@ import java.util.List;
 import javax.validation.Valid;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","http://localhost:8081"})
 @RequestMapping("/api/v1/appointments")
 @RestController
 public class AppointmentController {
@@ -80,6 +80,8 @@ public class AppointmentController {
     @DeleteMapping({"/delete-user/{userId}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAptByUserId(@PathVariable("userId") String userId){
+        System.out.println("Received");
+        System.out.println(userId);
         appointmentService.deleteAptByUserId(userId);
     }
 }

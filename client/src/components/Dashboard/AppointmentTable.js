@@ -60,7 +60,9 @@ export default function AppointmentTable() {
             axios.get(baseUrl + '/?userId=' + state.userId).then((res =>{
                 let tempRow = []
                 for(let info = 0; info < res.data.length; info++){
+                    console.log(res.data[info]["softDelete"])
                     if(!res.data[info]["softDelete"]){
+
                         tempRow.push(createData(res.data[info]))
                     }
                 }
