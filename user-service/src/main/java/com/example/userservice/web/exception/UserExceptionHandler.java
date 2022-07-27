@@ -1,7 +1,6 @@
 package com.example.userservice.web.exception;
 
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-@Slf4j
 public class UserExceptionHandler extends ResponseEntityExceptionHandler {
 
     private Map<String, String> errors;
