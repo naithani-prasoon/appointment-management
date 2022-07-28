@@ -70,11 +70,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
@@ -127,8 +122,6 @@
 				<version>2.22.2</version>
 			</plugin>
 
-
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -157,9 +150,6 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-
-
-
 		</plugins>
 	</build>
 

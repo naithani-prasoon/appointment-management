@@ -154,7 +154,7 @@ class UserServiceImplTest {
     @Test
     void getUserByFirstAndLastName() {
         //given
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         given(userRepository.findUsersByFirstNameAndLastName(anyString(), anyString())).willReturn(users);
 
         //when
@@ -169,7 +169,7 @@ class UserServiceImplTest {
     @Test
     void getUserByFirstName() {
         //given
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         given(userRepository.findUsersByFirstName(anyString())).willReturn(users);
 
         //when
@@ -183,7 +183,7 @@ class UserServiceImplTest {
     @Test
     void getUserByLastName() {
         //given
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         given(userRepository.findUsersByLastName(anyString())).willReturn(users);
 
         //when
@@ -197,7 +197,7 @@ class UserServiceImplTest {
     @Test
     void getUserByNoName() {
         //given
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         given(userRepository.findAll()).willReturn(users);
 
         //when

@@ -2,9 +2,6 @@ package com.appointment.appointmentservices.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Getter

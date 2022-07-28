@@ -7,7 +7,7 @@ import com.example.userservice.web.exception.NotFoundException;
 import com.example.userservice.web.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
-
-    WebClient webClient = WebClient.create("http://localhost:8081");
+    RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public List<UserDto> listUser() {
@@ -78,10 +77,9 @@ public class UserServiceImpl implements UserService {
             user.setIsDeleted(true);
             userRepository.save(user);
         }
-        webClient.delete()
-                .uri("/api/v1/appointments/delete-user/" + id)
-                .retrieve()
-                .bodyToMono(Void.class);
+
+        String url = "http://localhost:8081/api/v1/appointments/delete-user/" + id;
+        restTemplate.delete(url);
     }
 
     @Override
