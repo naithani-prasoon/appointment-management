@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.Instant;
 import java.util.UUID;
 
 
@@ -26,9 +27,9 @@ public class Appointments {
 
     private String appointmentDescription;
 
-    private String appointmentStartTime;
+    private Instant appointmentStartTime;
 
-    private String appointmentEndTime;
+    private Instant appointmentEndTime;
 
     private String appointmentMetaData;
 
