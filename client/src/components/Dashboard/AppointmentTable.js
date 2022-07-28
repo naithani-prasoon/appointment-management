@@ -104,8 +104,8 @@ export default function AppointmentTable() {
                         <h2 style={{textAlign:"left"}}>{row[0]}</h2>
                         <h2>{row[1]}</h2>
                         <h2 style={{textAlign:"left"}}>{row[2]}</h2>
-                        <h2>{row[3].replace("T", " ")}</h2>
-                        <h2>{row[4].replace("T", " ")}</h2>
+                        <h2>{row[3]? row[3].replace("T", " "): row[3]}</h2>
+                        <h2>{row[4]? row[4].replace("T", " "):row[4]}</h2>
                         <img alt={"Edit Button"} src={EditIcon} onClick={() => handleEditClick(row)}/>
                         <img alt={"Delete Button"} src={DeleteIcon} onClick={() => handleDeleteAppointment(row)}/>
                     </div>

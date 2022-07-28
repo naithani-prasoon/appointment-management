@@ -50,8 +50,8 @@ export default function AppointmentForm(props){
             data.append('appointmentName', name)
             data.append('appointmentType',type)
             data.append('appointmentDescription',desc)
-            data.append('appointmentStartTime',start)
-            data.append('appointmentEndTime',end)
+            data.append('appointmentStartTime',start.replace("T", " "))
+            data.append('appointmentEndTime',end.replace("T", " "))
             if(state && state.userId){
                 data.append('userID', state.userId)
             }

@@ -5,6 +5,7 @@ import com.appointment.appointmentservices.services.AppointmentService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,7 +51,7 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> handlePost(@Valid AppointmentsDto appointmentsDto){
+    public ResponseEntity handlePost(@Validated AppointmentsDto appointmentsDto){
         System.out.println(appointmentsDto);
         AppointmentsDto createAppointment = appointmentService.createApt(appointmentsDto);
         HttpHeaders headers = new HttpHeaders();
