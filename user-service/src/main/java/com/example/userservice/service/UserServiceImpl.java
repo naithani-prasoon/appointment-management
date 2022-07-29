@@ -19,7 +19,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
-    RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${appointment.url}")
     private String baseUrl;
@@ -82,7 +82,9 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         }
 
-        restTemplate.delete(baseUrl + "/delete-user/" + id);
+        String url = baseUrl+ "/delete-user/" + id;
+        String url2 = "http://localhost:8081/api/v1/appointments/delete-user/" + id;
+        restTemplate.delete(url2);
     }
 
     @Override

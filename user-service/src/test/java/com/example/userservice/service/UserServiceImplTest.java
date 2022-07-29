@@ -5,24 +5,29 @@ import com.example.userservice.model.UserDto;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.web.exception.NotFoundException;
 import com.example.userservice.web.mapper.UserMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@WireMockTest
 class UserServiceImplTest {
 
     @Mock
@@ -34,6 +39,11 @@ class UserServiceImplTest {
     @InjectMocks
     UserServiceImpl userService;
 
+    @Value("${appointment.url}")
+    private String baseUrl;
+
+
+    WireMockServer wm = new WireMockServer(options().dynamicPort());
     UserDto userDto;
     User user;
 
@@ -115,6 +125,9 @@ class UserServiceImplTest {
     @Test
     void hardDeleteUser() {
         //given
+        willDoNothing().given(userRepository).deleteById("1");
+        stubFor(delete(urlEqualTo("/api/v1/appointments/delete-user/" + "1"))
+                .willReturn(noContent()));
 
         //when
         userService.deleteUser("1", true);
@@ -128,6 +141,7 @@ class UserServiceImplTest {
         //given
         given(userRepository.findUserById("1")).willReturn(user);
         given(userRepository.save(user)).willReturn(user);
+
         //when
         userService.deleteUser("1", false);
 
