@@ -136,8 +136,7 @@ class UserControllerTest {
         given(userService.getUserByFirstOrLastName(any(String.class))).willReturn(List.of(userDto));
 
         mockMvc.perform(get("/api/v1/user/")
-                .param("firstName", userDto.getFirstName())
-                .param("lastName", userDto.getLastName()))
+                .param("name", userDto.getFirstName()+ " " + userDto.getLastName()))
                 .andExpect(status().isOk());
     }
 }

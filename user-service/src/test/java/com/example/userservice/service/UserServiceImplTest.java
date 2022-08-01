@@ -221,4 +221,18 @@ class UserServiceImplTest {
         then(userRepository).should().findAll();
         assertThat(users).isNotNull();
     }
+
+    @Test
+    void filterTest() {
+        //given
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        given(mapper.userToUserDto(user)).willReturn(userDto);
+
+        //when
+        userService.filterList(users);
+
+        //then
+        then(mapper).should().userToUserDto(any(User.class));
+    }
 }
