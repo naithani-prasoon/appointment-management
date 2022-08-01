@@ -130,7 +130,7 @@ class AppointmentControllerTest {
                         .param("appointmentDescription", appointmentsDto.getAppointmentDescription())
                         .param("appointmentStartTime", appointmentsDto.getAppointmentStartTime())
                         .param("appointmentEndTime", appointmentsDto.getAppointmentEndTime()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
 
         mockMvc.perform(put("/api/v1/appointments/" + UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -139,7 +139,7 @@ class AppointmentControllerTest {
                         .param("appointmentDescription", appointmentsDto.getAppointmentDescription())
                         .param("appointmentStartTime", appointmentsDto.getAppointmentStartTime())
                         .param("appointmentEndTime", appointmentsDto.getAppointmentEndTime()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     //Perfect put request
@@ -169,8 +169,8 @@ class AppointmentControllerTest {
                 .appointmentName("Prasoon's Dental Appointment")
                 .appointmentType("Urgent")
                 .appointmentDescription("Root Canal")
-                .appointmentStartTime("Tonight")
-                .appointmentEndTime("Tomorrow")
+                .appointmentStartTime("2022-10-12 15:33")
+                .appointmentEndTime("2022-10-12 17:33")
                 .appointmentMetaData("NA")
                 .build();
     }

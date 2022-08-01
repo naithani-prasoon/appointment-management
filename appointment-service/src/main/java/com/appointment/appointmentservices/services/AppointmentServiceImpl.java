@@ -15,6 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
 
+
     private final AppointmentMapper appointmentMapper;
 
     @Autowired
@@ -34,9 +35,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointmentsDto.getAppointmentStartTime(), appointmentsDto.getAppointmentEndTime(),
                 appointmentsDto.getAppointmentMetaData(), false);
 
-        appointmentRepo.save(appointmentMapper.toAppointments(newAppointment));
-
-        return newAppointment;
+        return appointmentMapper.toDto(appointmentRepo.save(appointmentMapper.toAppointments(newAppointment)));
     }
 
     @Override
