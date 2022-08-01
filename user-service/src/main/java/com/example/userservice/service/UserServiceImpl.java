@@ -81,8 +81,8 @@ public class UserServiceImpl implements UserService {
             user.setIsDeleted(true);
             userRepository.save(user);
         }
-
-        String url = baseUrl+ "/delete-user/" + id;
+        //not sure why but test will not recognize url as complete
+        String url = baseUrl + "/delete-user/" + id;
         String url2 = "http://localhost:8081/api/v1/appointments/delete-user/" + id;
         restTemplate.delete(url2);
     }

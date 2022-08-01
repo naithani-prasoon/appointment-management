@@ -29,6 +29,7 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<List<UserDto>> getUserByFirstOrLastName(@RequestParam(required = false) String name) {
+        if (name == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(userService.getUserByFirstOrLastName(name), HttpStatus.OK);
     }
 
@@ -42,7 +43,7 @@ public class UserController {
         return new ResponseEntity<>(userService.updateUser(userId, userDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId, @RequestParam(defaultValue = "false") boolean hardDelete) {
         userService.deleteUser(userId, hardDelete);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
