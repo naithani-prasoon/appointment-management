@@ -12,8 +12,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","http://localhost:8081"})
-@RequestMapping("/api/v1/appointments")
+@CrossOrigin
+@RequestMapping(path="${service.api.path}")
 @RestController
 public class AppointmentController {
 
