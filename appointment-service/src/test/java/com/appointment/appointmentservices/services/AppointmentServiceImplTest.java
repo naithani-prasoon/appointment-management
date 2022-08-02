@@ -95,22 +95,22 @@ class AppointmentServiceImplTest {
     }
 
     @MockitoSettings(strictness = Strictness.WARN)
-//    @Test
-//    void createApt() {
-//
-//        //given
-//        given(appointmentMapper.toAppointments(appointmentsDto)).willReturn(appointments);
-//        given(appointmentMapper.toDto(appointments)).willReturn(appointmentsDto);
-//        given(appointmentRepo.save(any(Appointments.class))).willReturn(appointments);
-//
-//        //when
-//        AppointmentsDto createdAppointment = appointmentService.createApt(appointmentsDto);
-//
-//        //then
-//        then(appointmentRepo).should().save(any(Appointments.class));
-//        assertThat(createdAppointment).isNotNull();
-//
-//    }
+    @Test
+    void createApt() {
+
+        //given
+        given(appointmentMapper.toAppointments(appointmentsDto)).willReturn(appointments);
+        given(appointmentMapper.toDto(appointments)).willReturn(appointmentsDto);
+        given(appointmentRepo.save(any(Appointments.class))).willReturn(appointments);
+
+        //when
+        AppointmentsDto createdAppointment = appointmentService.createApt(appointmentsDto);
+
+        //then
+        then(appointmentRepo).should().save(any(Appointments.class));
+        assertThat(createdAppointment).isNotNull();
+
+    }
 
     @Test
     void updateApt() {

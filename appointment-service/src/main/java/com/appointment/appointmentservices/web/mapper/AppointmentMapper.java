@@ -17,5 +17,4 @@ public interface AppointmentMapper {
     @Mapping(target = "appointmentEndTime", source="appointments.appointmentEndTime", dateFormat = "yyyy-MM-dd HH:mm")
     AppointmentsDto toDto(Appointments appointments);
     List<AppointmentsDto> toAppointmentsDtoList(List<Appointments> appointmentsList);
-    List<Appointments> toAppointmentsList(List<AppointmentsDto> appointmentsDtos);
 }
